@@ -1,5 +1,6 @@
 local A = OneMap
 local en = {
+    dungeonGroup = "Dungeons",
     smoothScroll = "Smooth scroll between map levels",
     smoothScrollTooltip = "At the zoom limit, continue scrolling after a short pause to change map level. Scroll forward to enter the location under the cursor; scroll back to leave it.",
     map = "Map", travel = "Travel", sources = "Free travel sources",
@@ -26,6 +27,7 @@ local en = {
     scope = "Map improvements and quick travel.",
 }
 local ru = {
+    dungeonGroup = "Данжи",
     smoothScroll = "Плавная прокрутка между уровнями карты",
     smoothScrollTooltip = "На пределе масштаба продолжите прокрутку после небольшой паузы, чтобы сменить уровень карты. Вперёд — войти в локацию под курсором, назад — выйти на уровень выше.",
     map = "Карта", travel = "Телепортация", sources = "Источники бесплатной телепортации",
@@ -53,6 +55,7 @@ local ru = {
 }
 local locales = { en = en, ru = ru }
 locales.de = {
+    dungeonGroup = "Verliese",
     smoothScroll = "Sanftes Scrollen zwischen Kartenebenen",
     smoothScrollTooltip = "Am Zoomlimit nach einer kurzen Pause weiterscrollen: vorwärts zum Ort unter dem Zeiger, rückwärts zur übergeordneten Karte.",
     map = "Karte",
@@ -93,6 +96,7 @@ locales.de = {
     scope = "Kartenverbesserungen und schnelles Reisen.",
 }
 locales.fr = {
+    dungeonGroup = "Donjons",
     smoothScroll = "Défilement fluide entre les niveaux de carte",
     smoothScrollTooltip = "À la limite du zoom, continuez après une courte pause : vers l’avant pour entrer dans le lieu pointé, vers l’arrière pour remonter.",
     map = "Carte",
@@ -133,6 +137,7 @@ locales.fr = {
     scope = "Améliorations de la carte et voyage rapide.",
 }
 locales.es = {
+    dungeonGroup = "Mazmorras",
     smoothScroll = "Desplazamiento suave entre niveles del mapa",
     smoothScrollTooltip = "En el límite del zoom, sigue desplazándote tras una breve pausa: hacia delante para entrar en el lugar señalado y hacia atrás para salir.",
     map = "Mapa",
@@ -173,6 +178,7 @@ locales.es = {
     scope = "Mejoras del mapa y viaje rápido.",
 }
 locales.jp = {
+    dungeonGroup = "ダンジョン",
     smoothScroll = "マップ階層間のスムーズスクロール",
     smoothScrollTooltip = "ズームの限界で少し待ってからスクロールを続けると、前方向でカーソル下の場所に入り、後方向で上の階層へ戻ります。",
     map = "マップ",
@@ -213,6 +219,7 @@ locales.jp = {
     scope = "マップの改善と素早い移動。",
 }
 locales.zh = {
+    dungeonGroup = "地下城",
     smoothScroll = "地图层级间平滑滚动",
     smoothScrollTooltip = "达到缩放极限后，稍作停顿并继续滚动：向前进入光标指向的地点，向后返回上一级。",
     map = "地图",

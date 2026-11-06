@@ -43,6 +43,12 @@ function A:CreateInstancePanel(kind, stringId, iconPrefix, setting)
             return ZO_ScrollList_GetData(controlLabel:GetParent())
         end)
     end)
+    ZO_ScrollList_AddDataType(list, 2, "ZO_WorldMapLocationRow", 32, function(control, data)
+        local label = control:GetNamedChild("Location")
+        label:SetFont("ZoFontWinH4")
+        label:SetText(data.name)
+        label:SetMouseEnabled(false)
+    end)
     local empty = WINDOW_MANAGER:CreateControl(nil, panel, CT_LABEL)
     empty:SetFont("ZoFontGame")
     empty:SetAnchor(TOPLEFT, panel, TOPLEFT, 20, 4)
@@ -52,8 +58,14 @@ function A:CreateInstancePanel(kind, stringId, iconPrefix, setting)
         if newState == SCENE_FRAGMENT_SHOWING then
             ZO_ScrollList_Clear(list)
             local dataList = ZO_ScrollList_GetDataList(list)
-            for _, destination in ipairs(self:InstanceList(kind)) do
-                dataList[#dataList + 1] = ZO_ScrollList_CreateDataEntry(1, destination)
+            for _, group in ipairs({ { kind = "trial", title = "trials" }, { kind = "dungeon", title = "dungeonGroup" } }) do
+                local entries = self:InstanceList(group.kind)
+                if #entries > 0 then
+                    dataList[#dataList + 1] = ZO_ScrollList_CreateDataEntry(2, { name = self:Text(group.title) })
+                    for _, destination in ipairs(entries) do
+                        dataList[#dataList + 1] = ZO_ScrollList_CreateDataEntry(1, destination)
+                    end
+                end
             end
             ZO_ScrollList_Commit(list)
             empty:SetHidden(#dataList > 0)
