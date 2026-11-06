@@ -12,3 +12,4 @@
 - Removed outward navigation attempts and fade animations at the top-level world/cosmic map boundary.
 - Skip-confirmation setting now covers paid/free travel and houses, including native map travel dialogs.
 - Brighter, thicker blue player-marker waves with a larger visible radius.
+- Holding Shift preserves map dragging, zoom and level navigation; rally markers require a short stationary Shift-click.

@@ -325,7 +325,9 @@ end }
 local normalizedZoom = 0
 function ZO_WorldMap_GetPanAndZoom() return { GetCurrentNormalizedZoom = function() return normalizedZoom end, SetCurrentNormalizedZoom = function(_, value) normalizedZoom = value end } end
 WORLD_MAP_MANAGER.ResizeAndReanchorMap = function() ZO_WorldMap:SetDimensions(600, 600) end
-load("Map"); load("Scroll"); load("Panels"); load("Settings"); load("OneMap")
+function ZO_WorldMap_MouseDown() end
+function ZO_WorldMap_MouseUp() end
+load("Map"); load("Scroll"); load("MapInput"); load("Panels"); load("Settings"); load("OneMap")
 events["OneMap" .. tostring(EVENT_ADD_ON_LOADED)](nil, "OtherAddon")
 equal(A.baseMapScale, nil, "ignore other addons loading")
 events["OneMap" .. tostring(EVENT_ADD_ON_LOADED)](nil, "OneMap")

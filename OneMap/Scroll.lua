@@ -24,7 +24,7 @@ end
 function A:CanContinueScroll(state)
     return self.saved.smoothScroll and self:CanUseMap() and MouseIsOver(ZO_WorldMapScroll)
         and GetCurrentMapId() == state.mapId
-        and not (IsControlKeyDown() or IsAltKeyDown() or IsShiftKeyDown())
+        and not (IsControlKeyDown() or IsAltKeyDown())
         and WORLD_MAP_MANAGER:IsMapChangingAllowed(state.direction)
         and (state.direction > 0 or self:CanScrollOut())
         and (state.direction < 0 or self:GetScrollTarget() == state.target)
@@ -75,7 +75,7 @@ end
 
 function A:HandleSmoothScroll(delta)
     if not self.saved.smoothScroll or not self:CanUseMap() or not MouseIsOver(ZO_WorldMapScroll)
-        or delta == 0 or IsControlKeyDown() or IsAltKeyDown() or IsShiftKeyDown() then
+        or delta == 0 or IsControlKeyDown() or IsAltKeyDown() then
         self:CancelSmoothScroll()
         return
     end

@@ -13,6 +13,7 @@ Destinations.lua
 Travel.lua
 Map.lua
 Scroll.lua
+MapInput.lua
 Panels.lua
 Settings.lua
 OneMap.lua

@@ -36,7 +36,8 @@ function GetCurrentMapId() return mapId end
 function MouseIsOver() return over end
 function IsControlKeyDown() return modifier end
 function IsAltKeyDown() return false end
-function IsShiftKeyDown() return false end
+local shift = false
+function IsShiftKeyDown() return shift end
 function NormalizeMousePositionToControl() return 0.4, 0.5 end
 function WouldProcessMapClick() return target ~= nil, target end
 function GetMapIdByIndex(index) return index end
@@ -178,4 +179,15 @@ time = 11200; ZO_WorldMap_MouseWheel(-1)
 currentMapType = MAPTYPE_WORLD; time = 11320; updates.OneMapScrollFade()
 equal(A.scrollFade, nil, "top-level state revalidated before fading")
 equal(navigations, navigationCount)
+currentMapType = MAPTYPE_SUBZONE; shift = true; position = 0.5
+wheelsBefore = nativeWheels; ZO_WorldMap_MouseWheel(1)
+equal(nativeWheels, wheelsBefore + 1, "Shift preserves ordinary zoom")
+position = 1; target = 25; time = 12000; ZO_WorldMap_MouseWheel(1)
+time = 12200; ZO_WorldMap_MouseWheel(1)
+equal(A.scrollFade ~= nil, true, "Shift preserves inward level transition")
+time = 12320; updates.OneMapScrollFade(); equal(mapId, 25, "holding Shift does not cancel fade")
+A:CancelSmoothScroll(); position = 0; time = 13000; ZO_WorldMap_MouseWheel(-1)
+time = 13200; ZO_WorldMap_MouseWheel(-1)
+equal(A.scrollFade ~= nil, true, "Shift preserves outward level transition")
+time = 13320; updates.OneMapScrollFade(); equal(mapId, 24)
 print("Smooth scroll: " .. count .. " assertions passed")
