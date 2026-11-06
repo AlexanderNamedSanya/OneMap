@@ -144,12 +144,13 @@ function A:InitializePanels()
     end)
     ZO_PostHook(antiquities, "AntiquityMapEntryMouseExit", function() self:HideTravelTooltip() end)
 
-    -- Eight tabs must fit in the stock 350px sidebar.
-    -- MenuBar:SetData is initialization-only in the stock UI. Scale the bar
-    -- while retaining the native title and divider sizes instead.
-    ZO_WorldMapInfoMenuBar:SetScale(0.6)
-    ZO_WorldMapInfoMenuBar:GetNamedChild("Label"):SetScale(1 / 0.6)
-    ZO_WorldMapInfoMenuBar:GetNamedChild("Divider"):SetScale(1 / 0.6)
+    -- Preserve native 51/64px button images and spacing; align the wider row
+    -- to the sidebar's right edge rather than scaling its controls.
+    ZO_WorldMapInfoMenuBar:ClearAnchors()
+    ZO_WorldMapInfoMenuBar:SetAnchor(TOPRIGHT, ZO_WorldMapInfo, TOPRIGHT, -20, 0)
+    local title = ZO_WorldMapInfoMenuBar:GetNamedChild("Label")
+    title:ClearAnchors()
+    title:SetAnchor(TOPLEFT, ZO_WorldMapInfo, TOPLEFT, 0, 65)
     self:CreateInstancePanel("dungeon", SI_ONEMAP_DUNGEONS, "EsoUI/Art/LFG/LFG_indexIcon_dungeon", "showDungeons")
     self:CreateInstancePanel("trial", SI_ONEMAP_TRIALS, "EsoUI/Art/LFG/LFG_indexIcon_dungeon", "showTrials")
 end

@@ -21,21 +21,12 @@ function A:CreateSettings()
                 self:ApplyMapSettings()
                 self:RefreshHouseRows()
                 WORLD_MAP_INFO.modeBar:UpdateButtons()
-                if (key == "showDungeons" or key == "showTrials") and not value then
-                    WORLD_MAP_INFO:SelectTab(SI_MAP_INFO_MODE_LOCATIONS)
-                end
+
             end,
         }
     end
     Description("scope")
     Header("map")
-    for _, key in ipairs({ "enlargeMap", "hideCompletion", "playerPulse", "compactHouses", "showDungeons", "showTrials", "questZone" }) do Checkbox(key) end
-    Header("travel")
-    Description("instructions")
-    for _, key in ipairs({ "rightClickTravel", "freeTravel", "travelTooltips" }) do Checkbox(key) end
-    Description("instance")
-    Description("social")
-    Header("sources")
-    for _, key in ipairs({ "useGroup", "useFriends", "useGuilds" }) do Checkbox(key) end
+    for _, key in ipairs({ "enlargeMap", "hideCompletion", "playerPulse" }) do Checkbox(key) end
     LibAddonMenu2:RegisterOptionControls(panelName, options)
 end

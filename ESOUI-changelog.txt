@@ -1,5 +1,4 @@
 26.11.1
-- Map enlargement is now 5%, with a fixed viewport during zoom and standard icon sizes.
-- Map icons retain native actions and tooltips; OneMap travel stays in sidebar lists.
-- Restored native Antiquities navigation and stopped tooltip queries from changing map/filter context.
-- Removed Dungeon/Trial prefixes in destination lists.
+- Standard-size sidebar tab buttons.
+- Map enlargement is now 10%, with a fixed viewport and standard pin sizes.
+- Simplified settings to map enlargement, Area Completion and player waves; sidebar and travel features are always enabled.

@@ -118,7 +118,7 @@ function A:InitializeMap()
     ZO_PostHook(WORLD_MAP_MANAGER, "ResizeAndReanchorMap", function()
         if not IsInGamepadPreferredMode() and WORLD_MAP_MANAGER:GetModeMapSize() == 1 and self.saved.enlargeMap then
             local width, height = ZO_WorldMap:GetDimensions()
-            ZO_WorldMap:SetDimensions(width * 1.05, height * 1.05)
+            ZO_WorldMap:SetDimensions(width * 1.10, height * 1.10)
             local zoom = ZO_WorldMap_GetPanAndZoom()
             zoom:SetCurrentNormalizedZoom(zoom:GetCurrentNormalizedZoom())
         end

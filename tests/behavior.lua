@@ -244,6 +244,7 @@ WINDOW_MANAGER = {
 }
 GuiRoot = Control:new("GuiRoot"); GuiRoot:SetDimensions(1920, 1080)
 ZO_WorldMap, ZO_WorldMapContainer, ZO_WorldMapScroll = Control:new("WorldMap"), Control:new("Container"), Control:new("Scroll")
+ZO_WorldMapInfo = Control:new("MapInfo")
 ZO_WorldMapInfoMenuBar = Control:new("ModeBar")
 local sceneCallback
 SCENE_MANAGER.GetScene = function() return { RegisterCallback = function(_, _, fn) sceneCallback = fn end } end
@@ -300,7 +301,7 @@ WORLD_MAP_INFO = { modeBar = { Add = function(_, id, groups, data) tabs[id] = { 
     UpdateButtons = function() end }, SelectTab = function() end }
 LibAddonMenu2 = { RegisterAddonPanel = function() end, RegisterOptionControls = function(_, _, data) optionControls = data end }
 ZO_SavedVars = { NewAccountWide = function(_, _, _, _, defaults)
-    local result = {}; for key, value in pairs(defaults) do result[key] = value end; return result
+    local result = {}; for key, value in pairs(defaults) do result[key] = value end; result.freeTravel = false; result.showTrials = false; return result
 end }
 local normalizedZoom = 0
 function ZO_WorldMap_GetPanAndZoom() return { GetCurrentNormalizedZoom = function() return normalizedZoom end, SetCurrentNormalizedZoom = function(_, value) normalizedZoom = value end } end
@@ -316,11 +317,11 @@ equal(houseRow:GetNamedChild("Location"):IsHidden(), true)
 equal(houseRow:GetNamedChild("Name").text, "Home  |c9a9a9aZone 10|r")
 equal(tabs.SI_ONEMAP_DUNGEONS ~= nil, true); equal(tabs.SI_ONEMAP_TRIALS ~= nil, true)
 WORLD_MAP_MANAGER:ResizeAndReanchorMap()
-equal(ZO_WorldMap:GetWidth(), 630, "viewport enlarged by five percent")
+equal(ZO_WorldMap:GetWidth(), 660, "viewport enlarged by ten percent")
 ZO_WorldMap_GetPanAndZoom():SetCurrentNormalizedZoom(0.8)
-equal(ZO_WorldMap:GetWidth(), 630, "zoom leaves viewport size unchanged")
+equal(ZO_WorldMap:GetWidth(), 660, "zoom leaves viewport size unchanged")
 WORLD_MAP_MANAGER:ResizeAndReanchorMap()
-equal(ZO_WorldMap:GetWidth(), 630, "layout never compounds enlargement")
+equal(ZO_WorldMap:GetWidth(), 660, "layout never compounds enlargement")
 local settingsCount = 0
 for _, control in ipairs(optionControls) do
     if control.type == "checkbox" then
@@ -331,7 +332,10 @@ for _, control in ipairs(optionControls) do
         end
     end
 end
-equal(settingsCount, 13, "every setting in AddonMenu")
+equal(settingsCount, 3, "only three map settings remain")
+equal(ZO_WorldMapInfoMenuBar:GetScale(), 1, "standard tab button scale")
+equal(A.saved.freeTravel, true, "legacy disabled travel setting is enabled")
+equal(A.saved.showTrials, true, "legacy hidden trials setting is enabled")
 local before = assertions
 local questHeader = Control:new("QuestHeader"); questHeader.data = { questIndex = 1 }
 local traveled, oldTravel, oldQuestTravel = nil, A.Travel, A.TravelToQuest
