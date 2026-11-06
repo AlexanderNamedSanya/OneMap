@@ -6,3 +6,4 @@
 - Optional immediate paid recall without the confirmation dialog; off by default.
 - Quest list retains every active journal quest when selecting a quest in another zone.
 - Optional smooth wheel navigation between map levels, with a short pause at zoom limits and gentle map fades.
+- Reduced map-level scroll pause to 0.2 seconds and added city/subzone overlays without map-list indices.

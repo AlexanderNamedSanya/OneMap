@@ -1,5 +1,5 @@
 local A = OneMap
-local PAUSE_MS, INPUT_GAP_MS = 400, 900
+local PAUSE_MS, INPUT_GAP_MS = 200, 900
 local FADE_OUT_MS, FADE_IN_MS = 120, 160
 
 function A:CancelSmoothScroll()
@@ -12,7 +12,13 @@ end
 function A:GetScrollTarget()
     local x, y = NormalizeMousePositionToControl(ZO_WorldMapContainer)
     local canEnter, mapIndex = WouldProcessMapClick(x, y)
-    if canEnter and mapIndex then return mapIndex end
+    if canEnter and mapIndex then return GetMapIdByIndex(mapIndex) end
+    -- City/subzone overlays may expose a map ID without a map-list index.
+    local name, _, _, _, _, _, mapId = GetMapMouseoverInfo(x, y)
+    if name and name ~= "" and mapId and mapId > 0 and mapId ~= GetCurrentMapId() then
+        local _, mapType = GetMapInfoById(mapId)
+        if mapType == MAPTYPE_SUBZONE then return mapId end
+    end
 end
 
 function A:CanContinueScroll(state)
@@ -35,16 +41,19 @@ function A:UpdateScrollTransition()
     if not state then return end
     local elapsed = GetFrameTimeMilliseconds() - state.started
     if not state.switched then
-        -- Revalidate the map under the cursor before dispatching a native map
-        -- navigation click. No pin handler or travel action is invoked here.
+        -- Revalidate the map under the cursor before native map navigation.
+        -- No pin handler or travel action is invoked here.
         if not self:CanContinueScroll(state) then self:CancelSmoothScroll(); return end
         if elapsed < FADE_OUT_MS then
             ZO_WorldMapContainer:SetAlpha(1 - elapsed / FADE_OUT_MS)
             return
         end
         self.scrollChangingMap = true
-        ZO_WorldMap_MouseUp(ZO_WorldMapContainer,
-            state.direction > 0 and MOUSE_BUTTON_INDEX_LEFT or MOUSE_BUTTON_INDEX_RIGHT, true)
+        if state.direction > 0 then
+            WORLD_MAP_MANAGER:SetMapById(state.target)
+        else
+            ZO_WorldMap_MouseUp(ZO_WorldMapContainer, MOUSE_BUTTON_INDEX_RIGHT, true)
+        end
         self.scrollChangingMap = false
         if GetCurrentMapId() == state.mapId then self:CancelSmoothScroll(); return end
         state.mapId, state.switched, state.started = GetCurrentMapId(), true, GetFrameTimeMilliseconds()
