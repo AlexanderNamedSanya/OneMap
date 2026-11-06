@@ -7,3 +7,5 @@
 - Quest list retains every active journal quest when selecting a quest in another zone.
 - Optional smooth wheel navigation between map levels, with a short pause at zoom limits and gentle map fades.
 - Reduced map-level scroll pause to 0.2 seconds and added city/subzone overlays without map-list indices.
+- Removed excess waiting for zoom interpolation before map-level transitions; both directions use the same pause.
+- Combined Dungeons and Trials in one alphabetical sidebar list.

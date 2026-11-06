@@ -79,9 +79,13 @@ function A:HandleSmoothScroll(delta)
     local zoom = ZO_WorldMap_GetPanAndZoom()
     local minimum, maximum = zoom:GetZoomMinMax()
     local hasZoomRange = zoom:CanMapZoom() and maximum > minimum + 0.001
-    local position = zoom:GetCurrentNormalizedZoom()
-    local atBoundary = not hasZoomRange or (not zoom:HasTargetZoom()
-        and (direction > 0 and position >= 0.999 or direction < 0 and position <= 0.001))
+    -- Native zoom approaches its target asymptotically. Waiting for the rendered
+    -- position to settle adds seconds, especially when zooming in. Start the
+    -- same boundary pause in either direction as soon as the requested zoom
+    -- reaches its limit, while the native interpolation continues rendering.
+    local position = zoom.targetNormalizedZoom or zoom:GetCurrentNormalizedZoom()
+    local atBoundary = not hasZoomRange
+        or (direction > 0 and position >= 0.999 or direction < 0 and position <= 0.001)
     if not atBoundary then
         self.scrollBoundary = nil
         return -- Native AddZoomDelta already uses smooth, cursor-locked interpolation.

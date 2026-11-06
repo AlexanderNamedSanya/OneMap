@@ -11,7 +11,7 @@ Map enhancements and social-first travel for ESO's PC keyboard world map.
 
 [LIST]
 [*]Optional 10% larger map, hidden Area Completion panel and soft blue waves around your player marker.
-[*]Single-line house/location entries and separate Dungeons and Trials tabs.
+[*]Single-line house/location entries and a combined Dungeons & Trials tab.
 [*]Left-click quests to see their zone instead of a transport NPC.
 [*]Right-click destinations to travel, preferring free jumps through your group, friends and guilds.
 [*]Direct dungeon/trial entry, house interiors and the game's priority wayshrines for zones.

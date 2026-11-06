@@ -176,7 +176,8 @@ function A:InstanceList(kind)
     local entries = {}
     for nodeIndex = 1, GetNumFastTravelNodes() do
         local entry = self:NodeDestination(nodeIndex)
-        if entry and entry.kind == kind then
+        if entry and (entry.kind == kind or (kind == "instances"
+            and (entry.kind == "dungeon" or entry.kind == "trial"))) then
             entry.name = zo_strformat(SI_ZONE_NAME, entry.name)
             entry.name = entry.name:gsub("^Dungeon:%s*", ""):gsub("^Trial:%s*", "")
             entry.location = zo_strformat(SI_ZONE_NAME, entry.location)

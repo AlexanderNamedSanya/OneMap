@@ -175,6 +175,5 @@ function A:InitializePanels()
     local title = ZO_WorldMapInfoMenuBar:GetNamedChild("Label")
     title:ClearAnchors()
     title:SetAnchor(TOPLEFT, ZO_WorldMapInfo, TOPLEFT, 0, 65)
-    self:CreateInstancePanel("dungeon", SI_ONEMAP_DUNGEONS, "EsoUI/Art/LFG/LFG_indexIcon_dungeon", "showDungeons")
-    self:CreateInstancePanel("trial", SI_ONEMAP_TRIALS, "EsoUI/Art/LFG/LFG_indexIcon_dungeon", "showTrials")
+    self:CreateInstancePanel("instances", SI_ONEMAP_DUNGEONS, "EsoUI/Art/LFG/LFG_indexIcon_dungeon", "showDungeons")
 end

@@ -184,6 +184,7 @@ nodes[4] = { zone = 10, known = true, kind = POI_TYPE_GROUP_DUNGEON, display = Z
 nodes[5] = { zone = 10, known = true, kind = POI_TYPE_GROUP_DUNGEON, instance = INSTANCE_TYPE_RAID, name = "Trial" }
 nodes[6] = { zone = 10, known = true, kind = POI_TYPE_GROUP_DUNGEON, filter = MAP_FILTER_ARENAS, name = "Arena" }
 equal(#A:InstanceList("dungeon"), 1); equal(#A:InstanceList("trial"), 1)
+equal(#A:InstanceList("instances"), 2, "combined list contains dungeons and trials, without arenas")
 local dungeon = A:NodeDestination(4)
 equal(dungeon.name, "Dungeon: Dungeon", "native POI labels may also include travel prefixes")
 A.instanceZones = { Dungeon = 20 }
@@ -329,7 +330,7 @@ A:ApplyMapSettings(); A:ApplyMapSettings(); equal(ZO_WorldMap:GetScale(), 1, "sc
 equal(WORLD_MAP_HOUSES.list.dataTypes[2].height, 28, "compact house row height")
 equal(houseRow:GetNamedChild("Location"):IsHidden(), true)
 equal(houseRow:GetNamedChild("Name").text, "Home  |c9a9a9aZone 10|r")
-equal(tabs.SI_ONEMAP_DUNGEONS ~= nil, true); equal(tabs.SI_ONEMAP_TRIALS ~= nil, true)
+equal(tabs.SI_ONEMAP_DUNGEONS ~= nil, true); equal(tabs.SI_ONEMAP_TRIALS, nil, "no separate trial tab")
 WORLD_MAP_MANAGER:ResizeAndReanchorMap()
 equal(ZO_WorldMap:GetWidth(), 660, "viewport enlarged by ten percent")
 ZO_WorldMap_GetPanAndZoom():SetCurrentNormalizedZoom(0.8)
