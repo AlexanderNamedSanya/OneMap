@@ -5,7 +5,9 @@ local function equal(a, b, label)
 end
 local time, mapId, target = 0, 10, 20
 local cityTarget, cityType = nil, 8
-MAPTYPE_SUBZONE = 8
+MAPTYPE_SUBZONE, MAPTYPE_WORLD, MAPTYPE_COSMIC = 8, 9, 10
+local currentMapType = MAPTYPE_SUBZONE
+function GetMapType() return currentMapType end
 local position, animating, canZoom = 0.5, false, true
 local enabledMap, over, modifier, allowed = true, true, false, true
 local nativeWheels, navigations, lastButton = 0, 0, nil
@@ -152,4 +154,28 @@ time = 8199; ZO_WorldMap_MouseWheel(-1); equal(A.scrollFade, nil)
 time = 8200; ZO_WorldMap_MouseWheel(-1)
 equal(A.scrollFade ~= nil, true, "outward pause uses the same 200ms")
 time = 8320; updates.OneMapScrollFade(); equal(mapId, 89)
+A:CancelSmoothScroll(); zoom.targetNormalizedZoom = nil; animating = false
+currentMapType = MAPTYPE_WORLD; position = 0
+local navigationCount = navigations
+time = 9000; ZO_WorldMap_MouseWheel(-1)
+time = 9300; ZO_WorldMap_MouseWheel(-1)
+equal(A.scrollBoundary, nil, "world map never arms outward navigation")
+equal(A.scrollFade, nil, "world map never starts outward fade")
+equal(updates.OneMapScrollFade, nil)
+equal(ZO_WorldMapContainer.alpha, 1)
+equal(navigations, navigationCount)
+currentMapType = MAPTYPE_COSMIC; time = 9600; ZO_WorldMap_MouseWheel(-1)
+equal(A.scrollBoundary, nil, "cosmic map is also a top-level boundary")
+currentMapType = MAPTYPE_WORLD; position = 0.5
+local wheelsBefore = nativeWheels; ZO_WorldMap_MouseWheel(-1)
+equal(nativeWheels, wheelsBefore + 1, "normal world-map zoom out remains available")
+position = 1; target = 20; time = 10000; ZO_WorldMap_MouseWheel(1)
+time = 10200; ZO_WorldMap_MouseWheel(1)
+equal(A.scrollFade ~= nil, true, "world-map inward navigation remains available")
+A:CancelSmoothScroll()
+currentMapType = MAPTYPE_SUBZONE; position = 0; time = 11000; ZO_WorldMap_MouseWheel(-1)
+time = 11200; ZO_WorldMap_MouseWheel(-1)
+currentMapType = MAPTYPE_WORLD; time = 11320; updates.OneMapScrollFade()
+equal(A.scrollFade, nil, "top-level state revalidated before fading")
+equal(navigations, navigationCount)
 print("Smooth scroll: " .. count .. " assertions passed")

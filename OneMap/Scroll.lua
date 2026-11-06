@@ -26,7 +26,13 @@ function A:CanContinueScroll(state)
         and GetCurrentMapId() == state.mapId
         and not (IsControlKeyDown() or IsAltKeyDown() or IsShiftKeyDown())
         and WORLD_MAP_MANAGER:IsMapChangingAllowed(state.direction)
+        and (state.direction > 0 or self:CanScrollOut())
         and (state.direction < 0 or self:GetScrollTarget() == state.target)
+end
+
+function A:CanScrollOut()
+    local mapType = GetMapType()
+    return mapType ~= MAPTYPE_WORLD and mapType ~= MAPTYPE_COSMIC
 end
 
 function A:StartScrollTransition(boundary)
@@ -89,6 +95,10 @@ function A:HandleSmoothScroll(delta)
     if not atBoundary then
         self.scrollBoundary = nil
         return -- Native AddZoomDelta already uses smooth, cursor-locked interpolation.
+    end
+    if direction < 0 and not self:CanScrollOut() then
+        self.scrollBoundary = nil
+        return true -- Top-level maps have no outward transition or fade.
     end
     local target = direction > 0 and self:GetScrollTarget() or nil
     if direction > 0 and not target then self.scrollBoundary = nil; return true end

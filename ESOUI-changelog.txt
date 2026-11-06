@@ -9,3 +9,4 @@
 - Reduced map-level scroll pause to 0.2 seconds and added city/subzone overlays without map-list indices.
 - Removed excess waiting for zoom interpolation before map-level transitions; both directions use the same pause.
 - Combined Dungeons and Trials in one alphabetical sidebar list.
+- Removed outward navigation attempts and fade animations at the top-level world/cosmic map boundary.
