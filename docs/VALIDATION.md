@@ -15,3 +15,7 @@ Observed in the live client:
 Full acceptance remains pending. In particular, server-completed social jumps, actual instance/house arrivals, quest/dig-site nearest-shrine results, pulse appearance, settings changes across resolutions and other addons require the scenarios in ACCEPTANCE.md. Automated routing checks and an opened confirmation dialog do not establish these outcomes.
 
 No ESOUI upload was performed.
+
+## Map regression corrections
+
+84 automated routing/UI assertions pass after replacing whole-control scaling with a 5% native viewport resize, removing map-pin and map-background travel hooks, eliminating map changes during price hovers, and restoring native Antiquities left-click behavior. Tests cover unchanged viewport dimensions during zoom, repeated layout, native pin handling and the original control scale. Live acceptance of these latest corrections is pending UI reload.

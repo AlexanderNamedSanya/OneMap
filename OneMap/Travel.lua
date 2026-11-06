@@ -101,7 +101,10 @@ function A:PriceText(destination)
         destination.nodeIndex or 0, destination.questIndex or 0, destination.antiquityId or 0 }, ":")
     local now = GetFrameTimeMilliseconds()
     if self.quote and self.quote.key == key and now - self.quote.time < 1000 then return self.quote.text end
-    local plan = self:PlanTravel(destination)
+    local quoteDestination = {}
+    for field, value in pairs(destination or {}) do quoteDestination[field] = value end
+    quoteDestination.antiquityId = nil -- Quoting must never change the native map/filter context.
+    local plan = self:PlanTravel(quoteDestination)
     local label
     if plan.cost and plan.cost > 0 then
         label = ZO_Currency_FormatKeyboard(plan.currency, plan.cost, ZO_CURRENCY_FORMAT_AMOUNT_ICON)

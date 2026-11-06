@@ -176,7 +176,7 @@ equal(dungeon.name, "Dungeon: Dungeon", "native POI labels may also include trav
 A.instanceZones = { Dungeon = 20 }
 equal(A:GetInstanceZone(dungeon), 20, "prefixed POI label identifies the interior")
 equal(A:GetInstanceZone({name = "Dungeon"}), 20, "exact activity label")
-equal(A:GetInstanceZone({name = "地下城：Dungeon"}), 20, "localized fullwidth colon prefix")
+equal(A:GetInstanceZone({name = "ењ°дё‹еџЋпјљDungeon"}), 20, "localized fullwidth colon prefix")
 equal(A:GetInstanceZone({name = "Other Dungeon"}), nil, "partial names are not guessed")
 friends = { { name = "@friend", zone = 20, status = 1 } }; A.saved.useFriends = true
 guilds = { { { name = "@guild", zone = 20, status = 1 } } }
@@ -188,6 +188,7 @@ group[1].zone = 10; equal(A:PlanTravel(dungeon).kind, "node", "outdoor group mem
 group = {}; friends = {}; guilds = {}
 local quest = A:QuestDestination(1)
 A.questPointCache = { [1] = { mapId = 10, points = { { x = 0.12, y = 0.1 } } } }
+map = 10
 equal(A:SelectWayshrine(quest), 1, "nearest quest shrine overrides capital")
 positions = { [1] = {
     { xLoc = 0.1, yLoc = 0.1, insideCurrentMapWorld = true, isBreadcrumb = true, symbolicState = QUEST_PIN_STATE_NONE },
@@ -225,6 +226,7 @@ function Control:SetText(text) self.text = text end
 function Control:GetTextDimensions() return 200, 40 end
 function Control:SetScale(scale) self.scale = scale end
 function Control:GetScale() return self.scale end
+function Control:GetDimensions() return self.width, self.height end
 function Control:SetWidth(value) self.width = value end
 function Control:SetHeight(value) self.height = value end
 function Control:GetWidth() return self.width end
@@ -300,16 +302,25 @@ LibAddonMenu2 = { RegisterAddonPanel = function() end, RegisterOptionControls = 
 ZO_SavedVars = { NewAccountWide = function(_, _, _, _, defaults)
     local result = {}; for key, value in pairs(defaults) do result[key] = value end; return result
 end }
+local normalizedZoom = 0
+function ZO_WorldMap_GetPanAndZoom() return { GetCurrentNormalizedZoom = function() return normalizedZoom end, SetCurrentNormalizedZoom = function(_, value) normalizedZoom = value end } end
+WORLD_MAP_MANAGER.ResizeAndReanchorMap = function() ZO_WorldMap:SetDimensions(600, 600) end
 load("Map"); load("Panels"); load("Settings"); load("OneMap")
 events["OneMap" .. tostring(EVENT_ADD_ON_LOADED)](nil, "OtherAddon")
 equal(A.baseMapScale, nil, "ignore other addons loading")
 events["OneMap" .. tostring(EVENT_ADD_ON_LOADED)](nil, "OneMap")
-equal(ZO_WorldMap:GetScale(), 1.1, "bootstrap applies 10%")
-A:ApplyMapSettings(); A:ApplyMapSettings(); equal(ZO_WorldMap:GetScale(), 1.1, "scale never compounds")
+equal(ZO_WorldMap:GetScale(), 1, "native control scale preserves icon sizes")
+A:ApplyMapSettings(); A:ApplyMapSettings(); equal(ZO_WorldMap:GetScale(), 1, "scale never compounds")
 equal(WORLD_MAP_HOUSES.list.dataTypes[2].height, 28, "compact house row height")
 equal(houseRow:GetNamedChild("Location"):IsHidden(), true)
 equal(houseRow:GetNamedChild("Name").text, "Home  |c9a9a9aZone 10|r")
 equal(tabs.SI_ONEMAP_DUNGEONS ~= nil, true); equal(tabs.SI_ONEMAP_TRIALS ~= nil, true)
+WORLD_MAP_MANAGER:ResizeAndReanchorMap()
+equal(ZO_WorldMap:GetWidth(), 630, "viewport enlarged by five percent")
+ZO_WorldMap_GetPanAndZoom():SetCurrentNormalizedZoom(0.8)
+equal(ZO_WorldMap:GetWidth(), 630, "zoom leaves viewport size unchanged")
+WORLD_MAP_MANAGER:ResizeAndReanchorMap()
+equal(ZO_WorldMap:GetWidth(), 630, "layout never compounds enlargement")
 local settingsCount = 0
 for _, control in ipairs(optionControls) do
     if control.type == "checkbox" then
@@ -320,7 +331,7 @@ for _, control in ipairs(optionControls) do
         end
     end
 end
-equal(settingsCount, 14, "every setting in AddonMenu")
+equal(settingsCount, 13, "every setting in AddonMenu")
 local before = assertions
 local questHeader = Control:new("QuestHeader"); questHeader.data = { questIndex = 1 }
 local traveled, oldTravel, oldQuestTravel = nil, A.Travel, A.TravelToQuest
@@ -341,9 +352,9 @@ antiquityControl.antiquityData.GetZoneId = function() return 0 end
 WORLD_MAP_ANTIQUITIES_KEYBOARD:AntiquityMapEntryClicked(antiquityControl, MOUSE_BUTTON_INDEX_RIGHT)
 equal(#menu, 3, "no teleport for antiquities without a fixed zone")
 local pinControl = { pin = { IsFastTravelWayShrine = function() return true end, GetFastTravelNodeIndex = function() return 4 end } }
-equal(pinManager:WouldPinHandleClick(pinControl, MOUSE_BUTTON_INDEX_RIGHT), true, "pin click return preserved")
+equal(pinManager:WouldPinHandleClick(pinControl, MOUSE_BUTTON_INDEX_RIGHT), false, "native pin handlers remain untouched")
 pinManager:HandlePinClicked(pinControl, MOUSE_BUTTON_INDEX_RIGHT)
-equal(traveled.nodeIndex, 4, "pin right-click direct dungeon route")
+equal(pinManager:HandlePinClicked(pinControl, MOUSE_BUTTON_INDEX_RIGHT), "native", "pin clicks use native behavior")
 A.saved.rightClickTravel = false
 equal(pinManager:WouldPinHandleClick(pinControl, MOUSE_BUTTON_INDEX_RIGHT), false)
 A.saved.rightClickTravel = true
@@ -353,4 +364,4 @@ gamepad = false; showing = false; A:ApplyMapSettings()
 equal(updates.OneMapWaves, nil); equal(updates.OneMapHover, nil)
 equal(MEDIUM_LEFT_PANEL_BG_FRAGMENT.SetHiddenForReason, nil, "shared background uses native lifecycle")
 A.Travel, A.TravelToQuest = oldTravel, oldQuestTravel
-print("UI integration with native hooks: 29 assertions passed; total " .. assertions)
+print("All routing and UI assertions passed: " .. assertions)

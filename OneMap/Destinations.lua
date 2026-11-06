@@ -96,7 +96,7 @@ function A:IsUsableNode(nodeIndex)
 end
 
 function A:SelectWayshrine(destination)
-    return self:OnZoneMap(destination.zoneId, function()
+    local function Select()
         local points = {}
         if destination.antiquityId then points = self:AntiquityPoints(destination.antiquityId) end
         if destination.questIndex and self.questPointCache then
@@ -128,7 +128,9 @@ function A:SelectWayshrine(destination)
             end
         end
         return bestNode
-    end)
+    end
+    if not destination.antiquityId then return Select() end
+    return self:OnZoneMap(destination.zoneId, Select)
 end
 
 function A:BuildInstanceZones()
@@ -161,7 +163,7 @@ function A:GetInstanceZone(destination)
         if zoneId and #activityName > 0 and #activityName <= #name then
             local prefix = name:sub(1, #name - #activityName)
             if name:sub(-#activityName) == activityName
-                and (prefix:match(":%s*$") or prefix:match("：%s*$")) then
+                and (prefix:match(":%s*$") or prefix:match("пјљ%s*$")) then
                 if #activityName > longest then result, longest = zoneId, #activityName
                 elseif #activityName == longest and result ~= zoneId then result = nil end
             end
@@ -176,6 +178,7 @@ function A:InstanceList(kind)
         local entry = self:NodeDestination(nodeIndex)
         if entry and entry.kind == kind then
             entry.name = zo_strformat(SI_ZONE_NAME, entry.name)
+            entry.name = entry.name:gsub("^Dungeon:%s*", ""):gsub("^Trial:%s*", "")
             entry.location = zo_strformat(SI_ZONE_NAME, entry.location)
             entries[#entries + 1] = entry
         end

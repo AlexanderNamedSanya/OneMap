@@ -130,13 +130,6 @@ function A:InitializePanels()
     ZO_PostHook("ZO_WorldMapQuestHeader_OnMouseExit", function() self:HideTravelTooltip() end)
 
     local antiquities = WORLD_MAP_ANTIQUITIES_KEYBOARD
-    ZO_PreHook(antiquities, "AntiquityMapEntryClicked", function(_, control, button)
-        if button == MOUSE_BUTTON_INDEX_LEFT and self.saved.antiquityZone and self:CanUseMap() then
-            local destination = self:AntiquityDestination(control.antiquityData)
-            if not destination or not self:ShowZone(destination.zoneId) then self:Alert("noLocation") end
-            return true
-        end
-    end)
     ZO_PostHook(antiquities, "AntiquityMapEntryClicked", function(_, control, button)
         if button == MOUSE_BUTTON_INDEX_RIGHT and self.saved.rightClickTravel and self:CanUseMap() then
             local destination = self:AntiquityDestination(control.antiquityData)

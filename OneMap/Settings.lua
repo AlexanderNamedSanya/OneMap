@@ -17,6 +17,7 @@ function A:CreateSettings()
                 self.saved[key] = value
                 self:CancelPendingTravel()
                 self.quote = nil
+                WORLD_MAP_MANAGER:ResizeAndReanchorMap()
                 self:ApplyMapSettings()
                 self:RefreshHouseRows()
                 WORLD_MAP_INFO.modeBar:UpdateButtons()
@@ -28,7 +29,7 @@ function A:CreateSettings()
     end
     Description("scope")
     Header("map")
-    for _, key in ipairs({ "enlargeMap", "hideCompletion", "playerPulse", "compactHouses", "showDungeons", "showTrials", "questZone", "antiquityZone" }) do Checkbox(key) end
+    for _, key in ipairs({ "enlargeMap", "hideCompletion", "playerPulse", "compactHouses", "showDungeons", "showTrials", "questZone" }) do Checkbox(key) end
     Header("travel")
     Description("instructions")
     for _, key in ipairs({ "rightClickTravel", "freeTravel", "travelTooltips" }) do Checkbox(key) end

@@ -10,7 +10,7 @@ OneMap: oneDOK. LibAddonMenu-2.0: sirinsidiator and Seerah. ESO UI/API and built
 Map enhancements and social-first travel for ESO's PC keyboard world map.
 
 [LIST]
-[*]Optional 10% larger map, hidden Area Completion panel and soft blue waves around your player marker.
+[*]Optional 5% larger map, hidden Area Completion panel and soft blue waves around your player marker.
 [*]Single-line house/location entries and separate Dungeons and Trials tabs.
 [*]Left-click quests to see their zone instead of a transport NPC.
 [*]Right-click destinations to travel, preferring free jumps through your group, friends and guilds.

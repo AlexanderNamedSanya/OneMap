@@ -3,8 +3,7 @@ local A = OneMap
 function A:ApplyMapSettings()
     if not self.baseMapScale then return end
     local keyboard = not IsInGamepadPreferredMode()
-    local large = WORLD_MAP_MANAGER:GetModeMapSize() == 1
-    ZO_WorldMap:SetScale(self.baseMapScale * (keyboard and large and self.saved.enlargeMap and 1.1 or 1))
+    ZO_WorldMap:SetScale(self.baseMapScale)
     local hide = keyboard and self.saved.hideCompletion
     WORLD_MAP_ZONE_STORY_KEYBOARD_FRAGMENT:SetHiddenForReason(self.name, hide)
     -- The zone story's native OnShowing/OnHiding manages its shared background.
@@ -40,34 +39,6 @@ function A:RenderTravelTooltip(destination)
     tooltip:SetHidden(false)
 end
 
-function A:PinDestination(pin)
-    if not pin then return nil end
-    if pin:IsFastTravelWayShrine() then return self:NodeDestination(pin:GetFastTravelNodeIndex()) end
-    if pin:IsQuest() then return self:QuestDestination(pin:GetQuestIndex()) end
-    if pin:IsPOI() then
-        local zoneIndex, poiIndex = pin:GetPOIZoneIndex(), pin:GetPOIIndex()
-        for nodeIndex = 1, GetNumFastTravelNodes() do
-            local nodeZone, nodePOI = GetFastTravelNodePOIIndicies(nodeIndex)
-            if nodeZone == zoneIndex and nodePOI == poiIndex then return self:NodeDestination(nodeIndex) end
-        end
-    end
-end
-
-function A:MouseMapDestination()
-    if not MouseIsOver(ZO_WorldMapScroll) then return nil end
-    for pin, hovered in pairs(ZO_WorldMap_GetPinManager():GetCurrentMouseOverPins()) do
-        if hovered then
-            local destination = self:PinDestination(pin)
-            if destination then return destination end
-        end
-    end
-    local mapId = WORLD_MAP_MANAGER.mouseoverMapId
-    if mapId and mapId > 0 then
-        local zoneIndex = GetZoneIndexByMapId(mapId)
-        if zoneIndex and zoneIndex > 0 then return self:ZoneDestination(GetZoneId(zoneIndex)) end
-    end
-end
-
 function A:UpdateWaves()
     local pin = ZO_WorldMap_GetPinManager():GetPlayerPin()
     local control = pin and pin:GetControl()
@@ -100,9 +71,7 @@ function A:UpdateMapActivity()
                     if self.hoverOwner:IsHidden() or not MouseIsOver(self.hoverOwner) then self:HideTravelTooltip()
                     else self:RenderTravelTooltip(self.hoverDestination); return end
                 end
-                local destination = self:MouseMapDestination()
-                if destination then self:RenderTravelTooltip(destination)
-                else self.travelTooltip:SetHidden(true) end
+                self.travelTooltip:SetHidden(true)
             end)
         end
     else
@@ -145,7 +114,16 @@ function A:InitializeMap()
     tooltip.label:SetFont("ZoFontGame")
     self.travelTooltip = tooltip
 
-    ZO_PostHook(WORLD_MAP_MANAGER, "ResizeAndReanchorMap", function() self:ApplyMapSettings() end)
+    -- Resize the native viewport once per layout pass, without scaling pins.
+    ZO_PostHook(WORLD_MAP_MANAGER, "ResizeAndReanchorMap", function()
+        if not IsInGamepadPreferredMode() and WORLD_MAP_MANAGER:GetModeMapSize() == 1 and self.saved.enlargeMap then
+            local width, height = ZO_WorldMap:GetDimensions()
+            ZO_WorldMap:SetDimensions(width * 1.05, height * 1.05)
+            local zoom = ZO_WorldMap_GetPanAndZoom()
+            zoom:SetCurrentNormalizedZoom(zoom:GetCurrentNormalizedZoom())
+        end
+        self:ApplyMapSettings()
+    end)
     CALLBACK_MANAGER:RegisterCallback("OnWorldMapModeChanged", function() self:ApplyMapSettings() end)
     CALLBACK_MANAGER:RegisterCallback("OnWorldMapChanged", function()
         self.quote = nil
@@ -158,38 +136,9 @@ function A:InitializeMap()
     end)
     WORLD_MAP_QUEST_BREADCRUMBS:RegisterCallback("QuestAvailable", function(questIndex) self:CacheQuestPoints(questIndex) end)
     SCENE_MANAGER:GetScene("worldMap"):RegisterCallback("StateChange", function()
+        WORLD_MAP_MANAGER:ResizeAndReanchorMap()
         self:ApplyMapSettings()
     end)
     EVENT_MANAGER:RegisterForEvent(self.name, EVENT_GAMEPAD_PREFERRED_MODE_CHANGED, function() self:ApplyMapSettings() end)
 
-    local manager = ZO_WorldMap_GetPinManager()
-    local oldWouldHandle = manager.WouldPinHandleClick
-    manager.WouldPinHandleClick = function(object, pinControl, button, ctrl, alt, shift)
-        if self.saved.rightClickTravel and self:CanUseMap() and button == MOUSE_BUTTON_INDEX_RIGHT
-            and not (ctrl or alt or shift) and pinControl
-            and self:PinDestination(ZO_MapPin.GetMapPinForControl(pinControl)) then return true end
-        return oldWouldHandle(object, pinControl, button, ctrl, alt, shift)
-    end
-    ZO_PreHook(manager, "HandlePinClicked", function(_, pinControl, button, ctrl, alt, shift)
-        if not self.saved.rightClickTravel or not self:CanUseMap() or button ~= MOUSE_BUTTON_INDEX_RIGHT
-            or ctrl or alt or shift or not pinControl then return end
-        local destination = self:PinDestination(ZO_MapPin.GetMapPinForControl(pinControl))
-        if destination then
-            if destination.questIndex then self:TravelToQuest(destination.questIndex) else self:Travel(destination) end
-            return true
-        end
-    end)
-    -- This method's boolean return controls native right-click zoom-out, so a
-    -- chained wrapper is required rather than a return-discarding pre-hook.
-    local oldRightClick = WORLD_MAP_MANAGER.HandleRightMouseClicked
-    WORLD_MAP_MANAGER.HandleRightMouseClicked = function(object, ...)
-        if self.saved.rightClickTravel and self:CanUseMap() then
-            local destination = self:MouseMapDestination()
-            if destination then
-                if destination.questIndex then self:TravelToQuest(destination.questIndex) else self:Travel(destination) end
-                return true
-            end
-        end
-        return oldRightClick(object, ...)
-    end
 end

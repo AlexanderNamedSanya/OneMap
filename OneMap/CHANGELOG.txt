@@ -1,5 +1,5 @@
 26.11.1
-- Optional larger map, hidden Area Completion and blue player-marker waves.
-- Compact house entries and Dungeons/Trials tabs with locations.
-- Quest-zone navigation and social-first travel with price tooltips.
-- House interior travel and nearest available wayshrines for located antiquities and quest objectives.
+- Map enlargement is now 5%, with a fixed viewport during zoom and standard icon sizes.
+- Map icons retain native actions and tooltips; OneMap travel stays in sidebar lists.
+- Restored native Antiquities navigation and stopped tooltip queries from changing map/filter context.
+- Removed Dungeon/Trial prefixes in destination lists.

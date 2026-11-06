@@ -1,7 +1,7 @@
 local A = OneMap
 local en = {
     map = "Map", travel = "Travel", sources = "Free travel sources",
-    enlargeMap = "Enlarge the map by 10%", hideCompletion = "Hide Area Completion",
+    enlargeMap = "Enlarge the map by 5%", hideCompletion = "Hide Area Completion",
     playerPulse = "Blue waves around the player marker", compactHouses = "House and location on one line",
     showDungeons = "Show Dungeons tab", showTrials = "Show Trials tab",
     questZone = "Show the quest's zone instead of transport NPCs",
@@ -23,7 +23,7 @@ local en = {
 }
 local ru = {
     map = "Карта", travel = "Телепортация", sources = "Источники бесплатной телепортации",
-    enlargeMap = "Увеличить карту на 10%", hideCompletion = "Скрыть Area Completion",
+    enlargeMap = "Увеличить карту на 5%", hideCompletion = "Скрыть Area Completion",
     playerPulse = "Голубые волны вокруг отметки персонажа", compactHouses = "Дом и локация в одной строке",
     showDungeons = "Показывать раздел «Данжи»", showTrials = "Показывать раздел «Триалы»",
     questZone = "Показывать зону квеста вместо NPC-перевозчика",
