@@ -133,7 +133,7 @@ function A:PriceText(destination)
         label = ZO_Currency_FormatKeyboard(plan.currency, plan.cost, ZO_CURRENCY_FORMAT_AMOUNT_ICON)
     elseif not plan.reason then label = self:Text("free")
     else label = self:Text("unavailable") end
-    local result = label
+    local result = plan.reason and self:Text("unavailable") or string.format(self:Text("price"), label)
     self.quote = { key = key, time = now, text = result }
     return result
 end

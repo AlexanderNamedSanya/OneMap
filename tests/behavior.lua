@@ -160,7 +160,7 @@ A:Travel(zone); equal(jump, "guild:@guild")
 group = { { name = "@group", zone = 10, online = true } }
 socialAllowed = false; A:Travel(zone); equal(jump, "group:@group", "group uses CanJumpToGroupMember")
 socialAllowed = true
-equal(A:PriceText(zone), "Free")
+equal(A:PriceText(zone), "Price: Free")
 group, guilds, friends = {}, {}, {}; A.quote = nil
 A:Travel(zone); equal(dialog.name, "RECALL_CONFIRM"); equal(dialog.data.nodeIndex, 2)
 equal(A.saved.skipPaidConfirmation, false, "paid confirmation enabled by default")
