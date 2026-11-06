@@ -27,7 +27,7 @@ SI_LFG_ACTIVITY_NAME, SI_ZONE_NAME = "name", "zone"
 local gamepad, showing, changing, combat, dead, leave, campaign = false, true, true, false, false, true, false
 local map, floor, time, currentNode, cooldown, gold = 99, 2, 1000, nil, 0, 10000
 local nodes, group, friends, guilds, positions = {}, {}, {}, {}, {}
-local jump, dialog, alert, directNode
+local jump, dialog, alert, directNode, directHouse, outsideHouse
 function GetCVar() return "en" end
 function ZO_CreateStringId(name) _G[name] = name end
 function ZO_Alert(_, _, text) alert = text end
@@ -101,6 +101,7 @@ function JumpToGroupMember(name) jump = "group:" .. name end
 function JumpToFriend(name) jump = "friend:" .. name end
 function JumpToGuildMember(name) jump = "guild:" .. name end
 function FastTravelToNode(node) directNode = node end
+function RequestJumpToHouse(house, outside) directHouse, outsideHouse = house, outside end
 function SCENE_MANAGER:ShowBaseScene() end
 function ZO_Dialogs_ShowPlatformDialog(name, data) dialog = { name = name, data = data } end
 function ZO_Currency_FormatKeyboard(_, value) return value .. " gold" end
@@ -167,7 +168,7 @@ A.saved.skipPaidConfirmation = true; dialog = nil
 A:Travel(zone); equal(directNode, 2, "paid recall skips dialog when enabled"); equal(dialog, nil)
 directNode = nil; gold = 0; equal(A:Travel(zone), false); equal(directNode, nil, "insufficient gold blocks immediate recall"); gold = 10000
 cooldown = 100; equal(A:Travel(zone), false); equal(directNode, nil, "cooldown blocks immediate recall"); cooldown = 0
-currentNode = 8; equal(A:PlanTravel(zone).cost, 0); A:Travel(zone); equal(dialog.name, "FAST_TRAVEL_CONFIRM"); equal(directNode, nil, "free shrine travel retains native dialog"); A.saved.skipPaidConfirmation = false
+currentNode = 8; equal(A:PlanTravel(zone).cost, 0); A:Travel(zone); equal(dialog, nil); equal(directNode, 2, "free shrine travel also skips confirmation"); A.saved.skipPaidConfirmation = false
 currentNode = 2; equal(A:PlanTravel(zone).reason, "unavailable"); currentNode = nil
 cooldown = 2000; equal(A:PlanTravel(zone).reason, "cooldown"); cooldown = 0
 gold = 0; equal(A:PlanTravel(zone).reason, "noGold"); gold = 10000
@@ -180,6 +181,9 @@ campaign = true; equal(A:PlanTravel(zone).reason, "restricted"); campaign = fals
 local house = { kind = "house", zoneId = 10, houseId = 42, name = "House" }
 A:Travel(house); equal(dialog.name, "TRAVEL_TO_HOUSE_CONFIRM"); equal(dialog.data.houseId, 42)
 equal(dialog.data.travelOutside, false, "inside house")
+A.saved.skipPaidConfirmation = true; dialog = nil; A:Travel(house)
+equal(directHouse, 42); equal(outsideHouse, false); equal(dialog, nil, "house confirmation skipped")
+A.saved.skipPaidConfirmation = false
 nodes[4] = { zone = 10, known = true, kind = POI_TYPE_GROUP_DUNGEON, display = ZONE_DISPLAY_TYPE_DUNGEON, name = "Dungeon: Dungeon", poiName = "Dungeon: Dungeon" }
 nodes[5] = { zone = 10, known = true, kind = POI_TYPE_GROUP_DUNGEON, instance = INSTANCE_TYPE_RAID, name = "Trial" }
 nodes[6] = { zone = 10, known = true, kind = POI_TYPE_GROUP_DUNGEON, filter = MAP_FILTER_ARENAS, name = "Arena" }
@@ -354,6 +358,16 @@ equal(A.travelTooltip:GetHeight(), 52, "compact tooltip padding")
 equal(ZO_WorldMapInfoMenuBar:GetScale(), 1, "standard tab button scale")
 equal(A.saved.freeTravel, true, "legacy disabled travel setting is enabled")
 equal(A.saved.showTrials, true, "legacy hidden trials setting is enabled")
+A.saved.skipPaidConfirmation = true; dialog = nil; directNode = nil
+ZO_Dialogs_ShowPlatformDialog("FAST_TRAVEL_CONFIRM", {nodeIndex = 4})
+equal(directNode, 4, "native map confirmation skipped"); equal(dialog, nil)
+ZO_Dialogs_ShowPlatformDialog("TRAVEL_TO_HOUSE_CONFIRM", {houseId = 12, travelOutside = true})
+equal(directHouse, 12); equal(outsideHouse, true, "native house destination preserved")
+ZO_Dialogs_ShowPlatformDialog("UNRELATED_CONFIRM", {})
+equal(dialog.name, "UNRELATED_CONFIRM", "non-travel confirmations unaffected")
+A.saved.skipPaidConfirmation = false
+ZO_Dialogs_ShowPlatformDialog("RECALL_CONFIRM", {nodeIndex = 2})
+equal(dialog.name, "RECALL_CONFIRM", "disabled setting restores confirmations")
 local before = assertions
 local questHeader = Control:new("QuestHeader"); questHeader.data = { questIndex = 1 }
 local traveled, oldTravel, oldQuestTravel = nil, A.Travel, A.TravelToQuest

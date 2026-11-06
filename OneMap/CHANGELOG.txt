@@ -10,3 +10,4 @@
 - Removed excess waiting for zoom interpolation before map-level transitions; both directions use the same pause.
 - Combined Dungeons and Trials in one alphabetical sidebar list.
 - Removed outward navigation attempts and fade animations at the top-level world/cosmic map boundary.
+- Skip-confirmation setting now covers paid/free travel and houses, including native map travel dialogs.

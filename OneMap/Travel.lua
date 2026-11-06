@@ -83,9 +83,14 @@ function A:Travel(destination)
         elseif plan.player.source == "friend" then JumpToFriend(plan.player.name)
         else JumpToGuildMember(plan.player.name) end
     elseif plan.kind == "house" then
-        ZO_Dialogs_ShowPlatformDialog("TRAVEL_TO_HOUSE_CONFIRM",
-            { houseId = plan.houseId, travelOutside = false }, { mainTextParams = { destination.name } })
-    elseif plan.cost > 0 and self.saved.skipPaidConfirmation then
+        if self.saved.skipPaidConfirmation then
+            RequestJumpToHouse(plan.houseId, false)
+            SCENE_MANAGER:ShowBaseScene()
+        else
+            ZO_Dialogs_ShowPlatformDialog("TRAVEL_TO_HOUSE_CONFIRM",
+                { houseId = plan.houseId, travelOutside = false }, { mainTextParams = { destination.name } })
+        end
+    elseif self.saved.skipPaidConfirmation then
         FastTravelToNode(plan.nodeIndex)
         SCENE_MANAGER:ShowBaseScene()
     else
@@ -95,6 +100,21 @@ function A:Travel(destination)
             { nodeIndex = plan.nodeIndex }, { mainTextParams = { select(2, GetFastTravelNodeInfo(plan.nodeIndex)) } })
     end
     return true
+end
+
+function A:InitializeTravel()
+    -- Also cover the stock map's travel dialogs; unrelated confirmations remain
+    -- entirely native. Use the same requests as each dialog's Confirm button.
+    ZO_PreHook("ZO_Dialogs_ShowPlatformDialog", function(name, data)
+        if not self.saved.skipPaidConfirmation or not data then return end
+        if (name == "RECALL_CONFIRM" or name == "FAST_TRAVEL_CONFIRM") and data.nodeIndex then
+            FastTravelToNode(data.nodeIndex)
+        elseif name == "TRAVEL_TO_HOUSE_CONFIRM" and data.houseId then
+            RequestJumpToHouse(data.houseId, data.travelOutside == true)
+        else return end
+        SCENE_MANAGER:ShowBaseScene()
+        return true
+    end)
 end
 
 function A:PriceText(destination)

@@ -9,6 +9,7 @@ local function OnLoaded(_, addonName)
         "rightClickTravel", "freeTravel", "travelTooltips", "useGroup", "useFriends", "useGuilds" }) do
         A.saved[key] = true
     end
+    A:InitializeTravel()
     A:InitializeMap()
     A:InitializeScroll()
     A:InitializePanels()
