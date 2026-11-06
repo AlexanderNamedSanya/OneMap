@@ -106,10 +106,16 @@ function ZO_Dialogs_ShowPlatformDialog(name, data) dialog = { name = name, data 
 function ZO_Currency_FormatKeyboard(_, value) return value .. " gold" end
 function zo_strformat(_, value) return value end
 function GetNumActivitiesByType() return 0 end
-function IsValidQuestIndex(index) return index == 1 end
+local journalEntries = { [1] = true, [2] = true }
+MAX_JOURNAL_QUESTS = 25
+EVENT_QUEST_ADDED, EVENT_QUEST_REMOVED, EVENT_QUEST_LIST_UPDATED, EVENT_QUEST_ADVANCED = 101, 102, 103, 104
+function IsValidQuestIndex(index) return journalEntries[index] == true end
+function GetJournalQuestLevel() return 50 end
+function GetJournalQuestType() return 1 end
+function GetJournalQuestZoneDisplayType() return 1 end
 function GetJournalQuestLocationInfo() return "Zone 10", "", 10, 1 end
 function GetJournalQuestId() return 100 end
-function GetJournalQuestName() return "Quest" end
+function GetJournalQuestName(index) return index == 2 and "Other zone quest" or "Quest" end
 function GetQuestZoneId() return 10 end
 WORLD_MAP_QUEST_BREADCRUMBS = {
     GetSteps = function() return positions end,
@@ -288,7 +294,8 @@ WORLD_MAP_HOUSES.list.dataTypes[2] = { height = 60, setupCallback = function(con
 end }
 WORLD_MAP_HOUSES.RefreshHouseList = function(self) self.list.dataTypes[2].setupCallback(houseRow, houseRow.data) end
 local nativeQuestCalls = 0
-WORLD_MAP_QUESTS = { QuestHeader_OnClicked = function() nativeQuestCalls = nativeQuestCalls + 1 end, QuestHeader_OnMouseEnter = function() end }
+local nativeQuestData = { masterList = {}, CompareQuests = function(a, b) return a.name < b.name end }
+WORLD_MAP_QUESTS = { data = nativeQuestData, LayoutList = function() end, QuestHeader_OnClicked = function() nativeQuestCalls = nativeQuestCalls + 1 end, QuestHeader_OnMouseEnter = function() end }
 function ZO_WorldMapHouseRow_OnMouseUp() return "native" end
 function ZO_WorldMapQuestHeader_OnMouseUp(header, button) WORLD_MAP_QUESTS:QuestHeader_OnClicked(header, button) end
 function ZO_WorldMapQuestHeader_OnMouseExit() end
@@ -357,6 +364,17 @@ ZO_WorldMapQuestHeader_OnMouseUp(questHeader, MOUSE_BUTTON_INDEX_RIGHT, true)
 equal(traveled, 1); equal(nativeQuestCalls, 0, "quest right-click consumed")
 WORLD_MAP_QUESTS:QuestHeader_OnClicked(questHeader, MOUSE_BUTTON_INDEX_LEFT)
 equal(map, 10, "quest left-click selects zone")
+WORLD_MAP_QUESTS:LayoutList()
+equal(#WORLD_MAP_QUESTS.data.masterList, 2, "quests from other zones survive navigation")
+equal(#nativeQuestData.masterList, 0, "native shared map-filtered data is untouched")
+positions = {}; WORLD_MAP_QUESTS:LayoutList()
+equal(#WORLD_MAP_QUESTS.data.masterList, 2, "missing map positions do not hide journal quests")
+journalEntries[2] = false
+events["OneMapQuestList" .. tostring(EVENT_QUEST_REMOVED)]()
+equal(#WORLD_MAP_QUESTS.data.masterList, 1, "removed quests leave the visible list")
+journalEntries[2] = true
+events["OneMapQuestList" .. tostring(EVENT_QUEST_ADDED)]()
+equal(#WORLD_MAP_QUESTS.data.masterList, 2, "new quests appear regardless of current zone")
 local antiquityControl = Control:new("Antiquity")
 antiquityControl.antiquityData = { GetId = function() return 7 end, GetZoneId = function() return 10 end, GetName = function() return "Relic" end }
 WORLD_MAP_ANTIQUITIES_KEYBOARD:AntiquityMapEntryClicked(antiquityControl, MOUSE_BUTTON_INDEX_RIGHT)

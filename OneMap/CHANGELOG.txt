@@ -4,3 +4,4 @@
 - Simplified settings to map enlargement, Area Completion and player waves; sidebar and travel features are always enabled.
 - Compact travel tooltips with content-sized width.
 - Optional immediate paid recall without the confirmation dialog; off by default.
+- Quest list retains every active journal quest when selecting a quest in another zone.

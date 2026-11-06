@@ -23,3 +23,5 @@ No ESOUI upload was performed.
 Latest settings/sidebar revision: 85 automated assertions pass. Native sidebar button scale is preserved; enlargement is 10%; the three remaining map settings are verified, and older disabled travel/trial values are migrated to enabled. Live verification after reload remains pending.
 
 Compact tooltip / paid-confirmation revision: 95 automated assertions pass, covering content-sized tooltip dimensions, default confirmation, immediate paid recall when opted in, insufficient currency and cooldown rejection, and retained native free-shrine dialogs. Live appearance and completed server travel remain pending UI reload and in-game verification.
+
+Quest-list regression: 100 automated assertions pass. The keyboard quest view now builds a separate list of all valid journal entries, retaining the native sorting and row rendering without changing the shared map-filtered singleton. Regression checks cover zone navigation, absent breadcrumb coordinates, quest addition/removal, and isolation of native shared data. Live verification after UI reload remains pending.

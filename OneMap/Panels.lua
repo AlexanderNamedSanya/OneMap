@@ -66,6 +66,30 @@ function A:CreateInstancePanel(kind, stringId, iconPrefix, setting)
 end
 
 function A:InitializePanels()
+    -- The native singleton lists only quests with positions on the current map.
+    -- Keep a separate keyboard view so zone navigation cannot discard journal
+    -- entries, or alter the singleton used by the gamepad map.
+    local quests = WORLD_MAP_QUESTS
+    quests.data = setmetatable({ masterList = {} }, { __index = quests.data })
+    ZO_PreHook(quests, "LayoutList", function(object)
+        local entries = {}
+        for index = 1, MAX_JOURNAL_QUESTS do
+            if IsValidQuestIndex(index) then
+                entries[#entries + 1] = {
+                    questIndex = index, name = GetJournalQuestName(index),
+                    level = GetJournalQuestLevel(index), questType = GetJournalQuestType(index),
+                    displayType = GetJournalQuestZoneDisplayType(index),
+                }
+            end
+        end
+        table.sort(entries, object.data.CompareQuests)
+        object.data.masterList = entries
+    end)
+    for _, event in ipairs({ EVENT_QUEST_ADDED, EVENT_QUEST_REMOVED, EVENT_QUEST_LIST_UPDATED, EVENT_QUEST_ADVANCED }) do
+        EVENT_MANAGER:RegisterForEvent("OneMapQuestList", event, function() quests:LayoutList() end)
+    end
+    quests:LayoutList()
+
     ZO_PostHook(WORLD_MAP_LOCATIONS, "SetupLocation", function(_, control)
         self:HookRowTooltip(control:GetNamedChild("Location"), function(label)
             local data = ZO_ScrollList_GetData(label:GetParent())
