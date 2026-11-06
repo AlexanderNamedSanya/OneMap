@@ -1,0 +1,22 @@
+AI disclosure: Code and translations were generated with OpenAI Codex. Full in-game review is pending.
+
+[B]Dependencies[/B]
+Required: [URL=https://www.esoui.com/downloads/info7-LibAddonMenu.html]LibAddonMenu-2.0[/URL] r43 or newer. Install separately.
+
+[B]Credits[/B]
+OneMap: oneDOK. LibAddonMenu-2.0: sirinsidiator and Seerah. ESO UI/API and built-in textures: ZeniMax Online Studios and respective rights holders; [URL=https://github.com/esoui/esoui]native UI source[/URL] consulted during development.
+
+[B]About OneMap[/B]
+Map enhancements and social-first travel for ESO's PC keyboard world map.
+
+[LIST]
+[*]Optional 10% larger map, hidden Area Completion panel and soft blue waves around your player marker.
+[*]Single-line house/location entries and separate Dungeons and Trials tabs.
+[*]Left-click quests to see their zone instead of a transport NPC.
+[*]Right-click destinations to travel, preferring free jumps through your group, friends and guilds.
+[*]Direct dungeon/trial entry, house interiors and the game's priority wayshrines for zones.
+[*]Nearest unlocked wayshrines for located antiquities and known quest objectives when no free jump is available.
+[*]Travel price or Free in tooltips. Antiquities retain their context menu with an added Teleport action.
+[/LIST]
+
+Settings: Settings > Addons > OneMap. English and Russian interface. The game's travel restrictions and confirmation dialogs apply.

@@ -1,0 +1,5 @@
+26.11.1
+- Optional larger map, hidden Area Completion and blue player-marker waves.
+- Compact house entries and Dungeons/Trials tabs with locations.
+- Quest-zone navigation and social-first travel with price tooltips.
+- House interior travel and nearest available wayshrines for located antiquities and quest objectives.

@@ -1,0 +1,48 @@
+local A = OneMap
+local en = {
+    map = "Map", travel = "Travel", sources = "Free travel sources",
+    enlargeMap = "Enlarge the map by 10%", hideCompletion = "Hide Area Completion",
+    playerPulse = "Blue waves around the player marker", compactHouses = "House and location on one line",
+    showDungeons = "Show Dungeons tab", showTrials = "Show Trials tab",
+    questZone = "Show the quest's zone instead of transport NPCs",
+    antiquityZone = "Left-click antiquities to show their zone",
+    rightClickTravel = "Right-click travel", freeTravel = "Prefer free travel to players",
+    useGroup = "Group members", useFriends = "Friends", useGuilds = "Guild members",
+    travelTooltips = "Show travel price in tooltips", dungeons = "Dungeons", trials = "Trials",
+    price = "Travel: %s", free = "Free", unavailable = "Travel unavailable",
+    noShrine = "No unlocked wayshrine is available in this zone.",
+    restricted = "Travel is unavailable here or while in combat.",
+    cooldown = "Recall is on cooldown.", noGold = "Not enough currency for this recall.",
+    noLocation = "The game does not provide a usable location for this destination.",
+    travelAction = "Teleport", empty = "No destinations available.",
+    waiting = "Waiting for the quest location. Click again when its markers appear.",
+    instructions = "Left-click: show location. Right-click: travel. Antiquities: right-click → Teleport. Paid recall uses the game's confirmation dialog.",
+    instance = "Free entry uses a group member inside this dungeon or trial; otherwise the game's direct instance travel is used.",
+    social = "Player availability is checked again on click. The game decides the arrival wayshrine. A rejected social jump never triggers an automatic paid recall.",
+    scope = "Keyboard world map. Account-wide settings. English and Russian; other game languages use English labels.",
+}
+local ru = {
+    map = "Карта", travel = "Телепортация", sources = "Источники бесплатной телепортации",
+    enlargeMap = "Увеличить карту на 10%", hideCompletion = "Скрыть Area Completion",
+    playerPulse = "Голубые волны вокруг отметки персонажа", compactHouses = "Дом и локация в одной строке",
+    showDungeons = "Показывать раздел «Данжи»", showTrials = "Показывать раздел «Триалы»",
+    questZone = "Показывать зону квеста вместо NPC-перевозчика",
+    antiquityZone = "ЛКМ по реликвии показывает её зону",
+    rightClickTravel = "Телепортация по правому клику", freeTravel = "Предпочитать бесплатный прыжок к игроку",
+    useGroup = "Участники группы", useFriends = "Друзья", useGuilds = "Участники гильдий",
+    travelTooltips = "Показывать стоимость в подсказках", dungeons = "Данжи", trials = "Триалы",
+    price = "Телепортация: %s", free = "Free", unavailable = "Телепортация недоступна",
+    noShrine = "В этой зоне нет открытого доступного шрайна.",
+    restricted = "Телепортация недоступна здесь или во время боя.",
+    cooldown = "Телепортация ещё восстанавливается.", noGold = "Недостаточно валюты для телепортации.",
+    noLocation = "Игра не предоставляет доступную локацию для этой цели.",
+    travelAction = "Телепортироваться", empty = "Нет доступных направлений.",
+    waiting = "Ожидание местоположения квеста. Нажмите ещё раз после появления его отметок.",
+    instructions = "ЛКМ — показать локацию. ПКМ — телепортация. Antiquities: ПКМ → Телепортироваться. Платный перенос использует подтверждение игры.",
+    instance = "Для бесплатного входа используется участник группы внутри нужного данжа или триала. Иначе — штатный перенос прямо внутрь.",
+    social = "Доступность игроков проверяется заново при клике. Шрайн прибытия выбирает игра. Отклонённый прыжок к игроку не запускает платный перенос автоматически.",
+    scope = "Карта для клавиатуры и мыши. Настройки общие для аккаунта. Русский и английский; для других языков подписи на английском.",
+}
+A.strings = GetCVar("language.2") == "ru" and ru or en
+ZO_CreateStringId("SI_ONEMAP_DUNGEONS", A:Text("dungeons"))
+ZO_CreateStringId("SI_ONEMAP_TRIALS", A:Text("trials"))

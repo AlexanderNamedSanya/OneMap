@@ -1,0 +1,7 @@
+Copyright (c) 2026 oneDOK. All rights reserved.
+
+No license to redistribute or create derivative works is granted.
+
+ESO API/UI and built-in assets remain the property of ZeniMax Online Studios
+and their respective rights holders. LibAddonMenu-2.0 is installed separately
+and remains under its own license.
