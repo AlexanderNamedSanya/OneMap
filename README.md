@@ -1,57 +1,22 @@
-# OneMap
+AI disclosure: Code and translations were generated with OpenAI Codex. Full in-game and native-speaker review is pending.
 
-Аддон ESO для карты и телепортации. Автор: **oneDOK**.
+## Dependencies
 
-AI disclosure: Code and translations were generated with OpenAI Codex. Full in-game review is pending.
+Required: [LibAddonMenu-2.0](https://www.esoui.com/downloads/info7-LibAddonMenu.html) r43 or newer. Install separately.
 
-Требуется [LibAddonMenu-2.0 r43 или новее](https://www.esoui.com/downloads/info7-LibAddonMenu.html), установленная отдельно. Целевая версия PC live: API **101051**.
+## Credits
 
-- Увеличение карты ровно на 10%, скрытие Area Completion и мягкие голубые волны вокруг персонажа — отдельные переключатели.
-- Дом и его локация в одной строке; общая вкладка «Данжи и триалы» с локациями.
-- ЛКМ по квесту показывает его зону, без перехода к NPC-перевозчику. Раздел Antiquities сохраняет штатный вид и поведение.
-- ПКМ по зоне, дому, данжу, триалу или квесту запускает выбор телепортации. В Antiquities сохранено обычное меню ПКМ с дополнительным пунктом телепортации.
-- В первую очередь используется бесплатный прыжок к участнику группы, другу или согильдийцу в нужной зоне. Для входа внутрь данжа/триала используется только участник группы внутри нужного инстанса; иначе — штатный перенос прямо внутрь.
-- При обычном переносе в зону шрайн выбирается по штатному приоритету игры, включая предпочтение автоматически открытых шрайнов при равном приоритете. Закрытые и заблокированные шрайны исключаются. Если открытых нет, платный перенос не выполняется.
-- Для лоцированной реликвии выбирается открытый шрайн, ближайший к центру одной из областей раскопок; для квеста — к одной из известных настоящих целей. Позиции NPC-перевозчиков и символические отметки исключаются. Бесплатный прыжок остаётся приоритетным; место прибытия выбирает игра.
-- Подсказка показывает стоимость выбранного маршрута либо **Free**. При клике маршрут рассчитывается заново. Стандартное подтверждение игры сохранено для переноса к шрайнам и в дома.
+OneMap: oneDOK. LibAddonMenu-2.0: sirinsidiator and Seerah. ESO UI/API: ZeniMax Online Studios and respective rights holders; native UI source consulted during development. Original player-wave texture: OneMap / oneDOK. [Native UI source](https://github.com/esoui/esoui).
 
-Настройки: **Settings → Addons → OneMap**. Все настройки общие для аккаунта. Интерфейс аддона: русский и английский, с английским fallback для остальных языков; названия игровых объектов берутся из игры.
+## About OneMap
 
-Поддерживается карта для клавиатуры и мыши. Аддон не изменяет интерфейс геймпада. Игра сохраняет ограничения боя, PvP, доступа к контенту и доступности игроков. Отклонённый сервером бесплатный прыжок не запускает платный перенос автоматически. Если координаты квеста ещё загружаются, аддон ждёт штатные данные до трёх секунд; при отсутствии ответа предлагает повторить клик.
+OneMap improves ESO’s PC keyboard world map and makes travel easier.
 
-Для реликвий без закреплённой зоны (zoneId = 0) телепортация не предлагается.
+- Optional larger map, player highlight and smooth scrolling between zones, cities and map levels.
+- House locations on one line and a combined Dungeons & Trials tab.
+- Left-click quests to show their zone; right-click sidebar destinations to travel. Antiquities keep their menu with an added Teleport action.
+- Free travel through group members, friends and guilds takes priority. Dungeons and trials use a group member inside or the game’s direct instance travel.
+- Travel prices in compact tooltips, suitable unlocked wayshrines for zones and known objectives, and travel into house interiors.
+- Optional hidden Area Completion panel and skipped teleport confirmations. Short Shift-clicks place markers while dragging and scrolling remain available.
 
-## Установка
-
-Скопировать папку `OneMap` в `Documents/Elder Scrolls Online/live/AddOns/`, установить LibAddonMenu отдельно и выполнить `/reloadui` в игре.
-
-## Проверка и сборка
-
-Python 3.12+ и пакет `lupa` с Lua 5.1:
-
-```text
-python tools/validate.py --source PATH_TO_ESOUI --lupa-path PATH_TO_LUPA
-python tools/package.py
-```
-
-Проверка включает синтаксис Lua 5.1, ссылки на API/константы исходников ESO, поведение выбора маршрута и интеграцию обработчиков. Она не заменяет проверку в ESO. Ручные сценарии перечислены в [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md).
-
-## Источники и credits
-
-LibAddonMenu-2.0: sirinsidiator и Seerah. API, штатные сценарии интерфейса и встроенные текстуры: ZeniMax Online Studios и соответствующие правообладатели. Использованы для сверки [исходники ESOUI 12.1.6 / API 101051](https://github.com/esoui/esoui), [рекомендации авторов ESOUI](https://www.esoui.com/forums/showpost.php?p=49229&postcount=1) и [ограничения аддонов](https://www.esoui.com/forums/showthread.php?t=9865).
-
-Голубая кольцевая DDS-текстура создана специально для OneMap. Сторонние аддоны и библиотеки не включены в пакет.
-
-Телепортация OneMap и её подсказки доступны только в списках правой панели. Значки карты используют штатные действия и подсказки. Размер окна карты не меняется при зуме; увеличение на 10% не масштабирует значки.
-
-В настройках остаются три переключателя: увеличение карты (на 10%), скрытие Area Completion и голубые волны. Компактные дома, вкладки данжей/триалов, переход к зоне квеста, телепортация, подсказки и все источники бесплатного переноса всегда включены, включая старые сохранения. Кнопки разделов имеют штатный размер.
-
-Дополнительный переключатель «Пропускать подтверждение платной телепортации» выключен по умолчанию. При включении платный перенос сразу списывает стоимость, с сохранением проверок валюты, боя и восстановления. Подсказка подстраивается по ширине содержимого и использует компактный шрифт и отступы.
-
-Плавная навигация колесом включена по умолчанию и отключается в настройках OneMap. Внутри карты используется штатный плавный зум. На пределе масштаба продолжение прокрутки после паузы 0,2 секунды переключает уровень: назад — на родительскую карту, вперёд — в локацию под курсором. Без нового движения колеса переход не запускается. Смена направления, цели или карты сбрасывает ожидание; переход сопровождается коротким затуханием и появлением карты.
-
-Прокрутка вперёд также открывает карту города или другой подлокации под курсором, когда игра предоставляет для неё отдельную карту. Обратная прокрутка возвращает на родительскую карту.
-
-Защитная пауза навигации начинается при достижении заданным масштабом предела, без ожидания полного завершения штатной анимации зума. Для приближения и отдаления используется одна пауза 0,2 секунды. Данжи и триалы находятся в одном алфавитном списке.
-
-Настройка «Пропускать подтверждения телепортации» применяется к платному переносу, бесплатным переходам между шрайнами и входу/выходу из дома, включая подтверждения штатной карты. Сохранённое значение прежнего переключателя сохраняется. Другие игровые подтверждения не меняются.
+Settings: Settings > Addons > OneMap. Account-wide settings. English, Russian, German, French, Spanish, Japanese and Simplified Chinese. Game travel restrictions apply.

@@ -1,22 +1,21 @@
-OneMap 26.11.1 — oneDOK
+AI disclosure: Code and translations were generated with OpenAI Codex. Full in-game and native-speaker review is pending.
 
-AI disclosure: Code and translations were generated with OpenAI Codex.
-Full in-game review is pending.
-
-Required: LibAddonMenu-2.0 r43+ (install separately)
+Dependencies
+Required: LibAddonMenu-2.0 r43 or newer. Install separately.
 https://www.esoui.com/downloads/info7-LibAddonMenu.html
 
-Settings > Addons > OneMap. Keyboard world map, account-wide settings.
-Left-click shows locations. Right-click travels. In Antiquities, right-click
-opens the native menu with an additional Teleport action.
+Credits
+OneMap: oneDOK. LibAddonMenu-2.0: sirinsidiator and Seerah. ESO UI/API: ZeniMax Online Studios and respective rights holders; native UI source consulted during development. Original player-wave texture: OneMap / oneDOK.
+https://github.com/esoui/esoui
 
-Free player jumps have priority. Dungeon/trial jumps use only group members
-inside the target instance; otherwise native direct instance travel is used.
-Paid recall and house travel use the game's confirmation dialogs.
-Unowned houses use the game's preview rules. Travel restrictions still apply.
-Rejected social jumps never automatically trigger a paid recall.
+About OneMap
+OneMap improves ESO’s PC keyboard world map and makes travel easier.
 
-Credits: LibAddonMenu-2.0 — sirinsidiator and Seerah.
-ESO UI/API and built-in textures — ZeniMax Online Studios and respective
-rights holders. Native source consulted: https://github.com/esoui/esoui
-Original blue ring texture: OneMap / oneDOK.
+- Optional larger map, player highlight and smooth scrolling between zones, cities and map levels.
+- House locations on one line and a combined Dungeons & Trials tab.
+- Left-click quests to show their zone; right-click sidebar destinations to travel. Antiquities keep their menu with an added Teleport action.
+- Free travel through group members, friends and guilds takes priority. Dungeons and trials use a group member inside or the game’s direct instance travel.
+- Travel prices in compact tooltips, suitable unlocked wayshrines for zones and known objectives, and travel into house interiors.
+- Optional hidden Area Completion panel and skipped teleport confirmations. Short Shift-clicks place markers while dragging and scrolling remain available.
+
+Settings: Settings > Addons > OneMap. Account-wide settings. English, Russian, German, French, Spanish, Japanese and Simplified Chinese. Game travel restrictions apply.

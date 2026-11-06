@@ -1,15 +1,9 @@
 26.11.1
-- Standard-size sidebar tab buttons.
-- Map enlargement is now 10%, with a fixed viewport and standard pin sizes.
-- Simplified settings to map enlargement, Area Completion and player waves; sidebar and travel features are always enabled.
-- Compact travel tooltips with content-sized width.
-- Optional immediate paid recall without the confirmation dialog; off by default.
-- Quest list retains every active journal quest when selecting a quest in another zone.
-- Optional smooth wheel navigation between map levels, with a short pause at zoom limits and gentle map fades.
-- Reduced map-level scroll pause to 0.2 seconds and added city/subzone overlays without map-list indices.
-- Removed excess waiting for zoom interpolation before map-level transitions; both directions use the same pause.
-- Combined Dungeons and Trials in one alphabetical sidebar list.
-- Removed outward navigation attempts and fade animations at the top-level world/cosmic map boundary.
-- Skip-confirmation setting now covers paid/free travel and houses, including native map travel dialogs.
-- Brighter, thicker blue player-marker waves with a larger visible radius.
-- Holding Shift preserves map dragging, zoom and level navigation; rally markers require a short stationary Shift-click.
+- Map enlargement, optional Area Completion hiding and a visible blue player highlight.
+- Smooth wheel navigation between map levels, including cities, with a short pause to prevent accidental transitions.
+- Combined Dungeons & Trials sidebar and house locations on one line.
+- Quest selection shows the correct zone and retains all active quests in the list.
+- Right-click sidebar travel prioritizes free player jumps, with compact price tooltips and an Antiquities menu action.
+- Optional skipping of teleport confirmations for wayshrines and houses.
+- Short Shift-click markers without blocking map dragging, zoom or level navigation.
+- English, Russian, German, French, Spanish, Japanese and Simplified Chinese interfaces.

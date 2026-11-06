@@ -76,11 +76,15 @@ strings.execute("OneMap = {}; function GetCVar() return 'en' end; function ZO_Cr
 strings.execute((root / "OneMap/Core.lua").read_text(encoding="utf-8"))
 strings.execute((root / "OneMap/Strings.lua").read_text(encoding="utf-8"))
 en = dict(strings.globals().OneMap.strings)
-strings.execute("function GetCVar() return 'ru' end")
+for code in ("ru", "de", "fr", "es", "jp", "zh"):
+    strings.execute(f"function GetCVar() return '{code}' end")
+    strings.execute((root / "OneMap/Strings.lua").read_text(encoding="utf-8"))
+    translated = dict(strings.globals().OneMap.strings)
+    assert en.keys() == translated.keys(), code
+    for key in en:
+        assert translated[key], (code, key)
+        assert re.findall(r"%[sd]", en[key]) == re.findall(r"%[sd]", translated[key]), (code, key)
+strings.execute("function GetCVar() return 'unknown' end")
 strings.execute((root / "OneMap/Strings.lua").read_text(encoding="utf-8"))
-ru = dict(strings.globals().OneMap.strings)
-assert en.keys() == ru.keys()
-for key in en:
-    assert en[key] and ru[key]
-    assert re.findall(r"%[sd]", en[key]) == re.findall(r"%[sd]", ru[key]), key
-print(f"Localization: {len(en)} keys in English and Russian; DDS and manifest passed")
+assert dict(strings.globals().OneMap.strings) == en
+print(f"Localization: {len(en)} keys across seven languages, English fallback; DDS and manifest passed")
