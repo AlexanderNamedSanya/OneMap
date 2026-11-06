@@ -26,12 +26,10 @@ end
 
 function A:RenderTravelTooltip(destination)
     local tooltip = self.travelTooltip
-    local text = destination.name or ""
-    if destination.location and destination.location ~= text then text = text .. "\n" .. destination.location end
     tooltip.label:SetWidth(280)
-    tooltip.label:SetText(text .. "\n|c80dfff" .. self:PriceText(destination) .. "|r")
+    tooltip.label:SetText("|c80dfff" .. self:PriceText(destination) .. "|r")
     local textWidth = tooltip.label:GetTextDimensions()
-    local width = math.min(280, math.max(100, textWidth)) + 12
+    local width = math.min(280, math.max(1, textWidth)) + 12
     tooltip.label:SetWidth(width - 12)
     local _, height = tooltip.label:GetTextDimensions()
     tooltip:SetDimensions(width, height + 12)
