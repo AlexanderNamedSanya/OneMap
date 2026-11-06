@@ -167,13 +167,17 @@ campaign = true; equal(A:PlanTravel(zone).reason, "restricted"); campaign = fals
 local house = { kind = "house", zoneId = 10, houseId = 42, name = "House" }
 A:Travel(house); equal(dialog.name, "TRAVEL_TO_HOUSE_CONFIRM"); equal(dialog.data.houseId, 42)
 equal(dialog.data.travelOutside, false, "inside house")
-nodes[4] = { zone = 10, known = true, kind = POI_TYPE_GROUP_DUNGEON, display = ZONE_DISPLAY_TYPE_DUNGEON, name = "Dungeon: Dungeon", poiName = "Dungeon" }
+nodes[4] = { zone = 10, known = true, kind = POI_TYPE_GROUP_DUNGEON, display = ZONE_DISPLAY_TYPE_DUNGEON, name = "Dungeon: Dungeon", poiName = "Dungeon: Dungeon" }
 nodes[5] = { zone = 10, known = true, kind = POI_TYPE_GROUP_DUNGEON, instance = INSTANCE_TYPE_RAID, name = "Trial" }
 nodes[6] = { zone = 10, known = true, kind = POI_TYPE_GROUP_DUNGEON, filter = MAP_FILTER_ARENAS, name = "Arena" }
 equal(#A:InstanceList("dungeon"), 1); equal(#A:InstanceList("trial"), 1)
 local dungeon = A:NodeDestination(4)
-equal(dungeon.name, "Dungeon", "POI names identify interiors without localized travel prefixes")
+equal(dungeon.name, "Dungeon: Dungeon", "native POI labels may also include travel prefixes")
 A.instanceZones = { Dungeon = 20 }
+equal(A:GetInstanceZone(dungeon), 20, "prefixed POI label identifies the interior")
+equal(A:GetInstanceZone({name = "Dungeon"}), 20, "exact activity label")
+equal(A:GetInstanceZone({name = "地下城：Dungeon"}), 20, "localized fullwidth colon prefix")
+equal(A:GetInstanceZone({name = "Other Dungeon"}), nil, "partial names are not guessed")
 friends = { { name = "@friend", zone = 20, status = 1 } }; A.saved.useFriends = true
 guilds = { { { name = "@guild", zone = 20, status = 1 } } }
 equal(A:PlanTravel(dungeon).kind, "node", "friends and guilds do not choose instance copies")

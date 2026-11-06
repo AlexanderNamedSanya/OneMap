@@ -32,8 +32,8 @@ function A:NodeDestination(nodeIndex)
         kind = "dungeon"
     end
     if kind == "dungeon" or kind == "trial" then
-        -- Travel node labels include localized "Dungeon:" / "Trial:" prefixes.
-        -- POI names match the activity names used to identify the interior zone.
+        -- Prefer the authoritative POI label. Some clients also prefix this
+        -- label; interior-zone matching below handles that presentation.
         local poiName = GetPOIInfo(zoneIndex, poiIndex)
         if poiName and poiName ~= "" then name = poiName end
     end
@@ -133,12 +133,20 @@ end
 
 function A:BuildInstanceZones()
     local byName = {}
+    local function AddName(name, zoneId)
+        if not name or name == "" then return end
+        local key = zo_strformat(SI_LFG_ACTIVITY_NAME, name)
+        if byName[key] == nil or byName[key] == zoneId then byName[key] = zoneId
+        else byName[key] = false end
+    end
     for _, activityType in ipairs({ LFG_ACTIVITY_DUNGEON, LFG_ACTIVITY_MASTER_DUNGEON, LFG_ACTIVITY_TRIAL }) do
         for index = 1, GetNumActivitiesByType(activityType) do
             local activityId = GetActivityIdByTypeAndIndex(activityType, index)
-            local name = zo_strformat(SI_LFG_ACTIVITY_NAME, GetActivityName(activityId))
             local zoneId = GetActivityZoneId(activityId)
-            if zoneId and zoneId > 0 then byName[name] = zoneId end
+            if zoneId and zoneId > 0 then
+                AddName(GetActivityName(activityId), zoneId)
+                AddName(GetZoneNameById(zoneId), zoneId)
+            end
         end
     end
     self.instanceZones = byName
@@ -146,7 +154,20 @@ end
 
 function A:GetInstanceZone(destination)
     if not self.instanceZones then self:BuildInstanceZones() end
-    return self.instanceZones[zo_strformat(SI_LFG_ACTIVITY_NAME, destination.name)]
+    local name = zo_strformat(SI_LFG_ACTIVITY_NAME, destination.name)
+    if self.instanceZones[name] ~= nil then return self.instanceZones[name] or nil end
+    local result, longest = nil, 0
+    for activityName, zoneId in pairs(self.instanceZones) do
+        if zoneId and #activityName > 0 and #activityName <= #name then
+            local prefix = name:sub(1, #name - #activityName)
+            if name:sub(-#activityName) == activityName
+                and (prefix:match(":%s*$") or prefix:match("：%s*$")) then
+                if #activityName > longest then result, longest = zoneId, #activityName
+                elseif #activityName == longest and result ~= zoneId then result = nil end
+            end
+        end
+    end
+    return result
 end
 
 function A:InstanceList(kind)
