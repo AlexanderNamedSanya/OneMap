@@ -3,7 +3,7 @@ local A = OneMap
 
 A.defaults = {
     enlargeMap = true,
-    hideCompletion = true,
+    hideCompletion = false,
     playerPulse = true,
     smoothScroll = true,
     skipPaidConfirmation = false,

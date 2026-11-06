@@ -23,7 +23,7 @@ local en = {
     instructions = "Left-click: show location. Right-click: travel. Antiquities: right-click → Teleport. Paid recall uses the game's confirmation dialog.",
     instance = "Free entry uses a group member inside this dungeon or trial; otherwise the game's direct instance travel is used.",
     social = "Player availability is checked again on click. The game decides the arrival wayshrine. A rejected social jump never triggers an automatic paid recall.",
-    scope = "Keyboard world map. Account-wide settings. English and Russian; other game languages use English labels.",
+    scope = "Map improvements and quick travel.",
 }
 local ru = {
     smoothScroll = "Плавная прокрутка между уровнями карты",
@@ -49,7 +49,7 @@ local ru = {
     instructions = "ЛКМ — показать локацию. ПКМ — телепортация. Antiquities: ПКМ → Телепортироваться. Платный перенос использует подтверждение игры.",
     instance = "Для бесплатного входа используется участник группы внутри нужного данжа или триала. Иначе — штатный перенос прямо внутрь.",
     social = "Доступность игроков проверяется заново при клике. Шрайн прибытия выбирает игра. Отклонённый прыжок к игроку не запускает платный перенос автоматически.",
-    scope = "Карта для клавиатуры и мыши. Настройки общие для аккаунта. Русский и английский; для других языков подписи на английском.",
+    scope = "Улучшения карты и быстрая телепортация.",
 }
 A.strings = GetCVar("language.2") == "ru" and ru or en
 ZO_CreateStringId("SI_ONEMAP_DUNGEONS", A:Text("dungeons"))
