@@ -54,7 +54,7 @@ function A:UpdateWaves()
             local progress = ((time + (index - 1) * 800) % 2400) / 2400
             local size = 20 + 76 * progress
             wave:SetDimensions(size, size)
-            wave:SetAlpha(math.sin(progress * math.pi) * 0.95)
+            wave:SetAlpha(math.sin(progress * math.pi) * 0.76)
         end
     end
 end
