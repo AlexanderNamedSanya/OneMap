@@ -1,21 +1,19 @@
-AI disclosure: Code and translations were generated with OpenAI Codex. Full in-game and native-speaker review is pending.
+AI disclosure: Code and translations were created with OpenAI Codex.
 
-[B]Dependencies[/B]
-Required: [URL=https://www.esoui.com/downloads/info7-LibAddonMenu.html]LibAddonMenu-2.0[/URL] r43 or newer. Install separately.
+[B]Required[/B]
+[URL=https://www.esoui.com/downloads/info7-LibAddonMenu.html]LibAddonMenu-2.0[/URL] r43 or newer, installed separately.
 
-[B]Credits[/B]
-OneMap: oneDOK. LibAddonMenu-2.0: sirinsidiator and Seerah. ESO UI/API: ZeniMax Online Studios and respective rights holders; native UI source consulted during development. Original player-wave texture: OneMap / oneDOK. [URL=https://github.com/esoui/esoui]Native UI source[/URL].
-
-[B]About OneMap[/B]
-OneMap improves ESO’s PC keyboard world map and makes travel easier.
+OneMap improves the world map and travel in ESO’s keyboard and mouse interface.
 
 [LIST]
-[*]Optional larger map, player highlight and smooth scrolling between zones, cities and map levels.
-[*]House locations on one line and a combined Dungeons & Trials tab.
-[*]Left-click quests to show their zone; right-click sidebar destinations to travel. Antiquities keep their menu with an added Teleport action.
-[*]Free travel through group members, friends and guilds takes priority. Dungeons and trials use a group member inside or the game’s direct instance travel.
-[*]Travel prices in compact tooltips, suitable unlocked wayshrines for zones and known objectives, and travel into house interiors.
-[*]Optional hidden Area Completion panel and skipped teleport confirmations. Short Shift-clicks place markers while dragging and scrolling remain available.
+[*]Enlarge the map, highlight your character, hide Area Completion and scroll smoothly between map levels.
+[*]View house locations and browse dungeons and trials in one tab.
+[*]Left-click quests to show their zone. Right-click sidebar destinations to travel; for Antiquities, select Teleport from the menu.
+[*]Prefer free travel through your group, friends and guilds. See the travel price before clicking.
+[*]Travel into houses and dungeons, or to unlocked wayshrines near known quest objectives and dig sites.
+[*]Optionally skip teleport confirmations. Paid travel then spends gold immediately.
 [/LIST]
 
-Settings: Settings > Addons > OneMap. Account-wide settings. English, Russian, German, French, Spanish, Japanese and Simplified Chinese. Game travel restrictions apply.
+Settings: Settings > Addons > OneMap. Settings apply to the whole account. Supports English, Russian, German, French, Spanish, Japanese and Simplified Chinese.
+
+Author: oneDOK. LibAddonMenu-2.0: sirinsidiator and Seerah.
