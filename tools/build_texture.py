@@ -12,7 +12,7 @@ pixels = bytearray()
 for y in range(size):
     for x in range(size):
         radius = math.hypot(x + 0.5 - size / 2, y + 0.5 - size / 2)
-        alpha = round(255 * math.exp(-0.5 * ((radius - 53) / 1.6) ** 2))
+        alpha = round(255 * math.exp(-0.5 * ((radius - 53) / 3.0) ** 2))
         pixels.extend((255, 255, 255, alpha))
 target = root / "OneMap/art/wave.dds"
 target.parent.mkdir(parents=True, exist_ok=True)

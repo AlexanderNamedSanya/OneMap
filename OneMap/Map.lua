@@ -52,9 +52,9 @@ function A:UpdateWaves()
             wave:ClearAnchors()
             wave:SetAnchor(CENTER, control, CENTER)
             local progress = ((time + (index - 1) * 800) % 2400) / 2400
-            local size = 16 + 58 * progress
+            local size = 20 + 76 * progress
             wave:SetDimensions(size, size)
-            wave:SetAlpha(math.sin(progress * math.pi) * (1 - progress) * 0.65)
+            wave:SetAlpha(math.sin(progress * math.pi) * 0.95)
         end
     end
 end
@@ -92,7 +92,7 @@ function A:InitializeMap()
     for index = 1, 3 do
         local wave = WINDOW_MANAGER:CreateControl("OneMapWave" .. index, ZO_WorldMapContainer, CT_TEXTURE)
         wave:SetTexture("OneMap/art/wave.dds")
-        wave:SetColor(0.32, 0.78, 1, 1)
+        wave:SetColor(0.05, 0.6, 1, 1)
         wave:SetDrawTier(DT_HIGH)
         wave:SetDrawLevel(9)
         wave:SetMouseEnabled(false)

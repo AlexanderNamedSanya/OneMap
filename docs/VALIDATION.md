@@ -35,3 +35,5 @@ Zoom-delay / combined-tab revision: 149 assertions pass (101 routing/UI, 48 scro
 Top-level scroll boundary revision: 159 assertions pass (101 routing/UI + 58 scroll). World/cosmic maps reject outward level transitions before arming the boundary or starting a fade. Ordinary zoom inside the world map and inward navigation remain available; top-level state is rechecked before an already-pending transition. Live verification after reload remains pending.
 
 All-travel confirmation revision: 168 automated assertions pass (110 routing/UI, 58 scroll). Opt-in bypass covers recall, free wayshrine travel and house destinations, including the native map platform dialogs. Regression checks preserve house interior/exterior targets, restore confirmations when disabled, and leave unrelated dialogs untouched. Existing setting values are retained. Live acceptance remains pending reload.
+
+Player-wave visibility revision: thicker original DDS ring, higher-opacity blue waves and increased diameter (20–96 UI units). Native map pins remain above the waves. Existing 168 assertions, Lua 5.1 syntax, localization and DDS checks pass. Live visual review remains pending reload.
