@@ -6,7 +6,7 @@ Required: [LibAddonMenu-2.0](https://www.esoui.com/downloads/info7-LibAddonMenu.
 
 ## Credits
 
-OneMap: oneDOK. LibAddonMenu-2.0: sirinsidiator and Seerah. ESO UI/API: ZeniMax Online Studios and respective rights holders; native UI source consulted during development. Original player-wave texture: OneMap / oneDOK. [Native UI source](https://github.com/esoui/esoui).
+OneMap: oneDOK. LibAddonMenu-2.0: sirinsidiator and Seerah. ESO UI/API: ZeniMax Online Studios and respective rights holders; native UI source consulted during development.
 
 ## About OneMap
 
