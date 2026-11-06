@@ -17,6 +17,7 @@ function A:CreateSettings()
             setFunc = function(value)
                 self.saved[key] = value
                 self:CancelPendingTravel()
+                self:CancelSmoothScroll()
                 self.quote = nil
                 WORLD_MAP_MANAGER:ResizeAndReanchorMap()
                 self:ApplyMapSettings()
@@ -28,7 +29,7 @@ function A:CreateSettings()
     end
     Description("scope")
     Header("map")
-    for _, key in ipairs({ "enlargeMap", "hideCompletion", "playerPulse" }) do Checkbox(key) end
+    for _, key in ipairs({ "enlargeMap", "hideCompletion", "playerPulse", "smoothScroll" }) do Checkbox(key) end
     Checkbox("skipPaidConfirmation")
     LibAddonMenu2:RegisterOptionControls(panelName, options)
 end

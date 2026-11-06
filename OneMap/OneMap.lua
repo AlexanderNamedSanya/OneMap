@@ -10,6 +10,7 @@ local function OnLoaded(_, addonName)
         A.saved[key] = true
     end
     A:InitializeMap()
+    A:InitializeScroll()
     A:InitializePanels()
     A:CreateSettings()
     A:ApplyMapSettings()

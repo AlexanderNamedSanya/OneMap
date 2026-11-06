@@ -5,6 +5,7 @@ A.defaults = {
     enlargeMap = true,
     hideCompletion = true,
     playerPulse = true,
+    smoothScroll = true,
     skipPaidConfirmation = false,
     compactHouses = true,
     showDungeons = true,

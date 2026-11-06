@@ -1,5 +1,7 @@
 local A = OneMap
 local en = {
+    smoothScroll = "Smooth scroll between map levels",
+    smoothScrollTooltip = "At the zoom limit, continue scrolling after a short pause to change map level. Scroll forward to enter the location under the cursor; scroll back to leave it.",
     map = "Map", travel = "Travel", sources = "Free travel sources",
     skipPaidConfirmation = "Skip paid teleport confirmation",
     skipPaidConfirmationTooltip = "Paid travel starts immediately and spends the displayed amount without a confirmation dialog.",
@@ -24,6 +26,8 @@ local en = {
     scope = "Keyboard world map. Account-wide settings. English and Russian; other game languages use English labels.",
 }
 local ru = {
+    smoothScroll = "Плавная прокрутка между уровнями карты",
+    smoothScrollTooltip = "На пределе масштаба продолжите прокрутку после небольшой паузы, чтобы сменить уровень карты. Вперёд — войти в локацию под курсором, назад — выйти на уровень выше.",
     map = "Карта", travel = "Телепортация", sources = "Источники бесплатной телепортации",
     skipPaidConfirmation = "Пропускать подтверждение платной телепортации",
     skipPaidConfirmationTooltip = "Платная телепортация начинается сразу и списывает указанную сумму без окна подтверждения.",

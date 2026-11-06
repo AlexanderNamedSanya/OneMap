@@ -60,6 +60,11 @@ lua.globals().ADDON_ROOT = str(root / "OneMap").replace("\\", "/")
 lua.globals().SOURCE_ROOT = str(args.source).replace("\\", "/")
 lua.execute((root / "tests/behavior.lua").read_text(encoding="utf-8"))
 
+scroll = LuaRuntime(unpack_returned_tuples=True)
+scroll.globals().ADDON_ROOT = str(root / "OneMap").replace("\\", "/")
+scroll.globals().SOURCE_ROOT = str(args.source).replace("\\", "/")
+scroll.execute((root / "tests/scroll.lua").read_text(encoding="utf-8"))
+
 # Both interface languages must have exactly the same keys and placeholders.
 strings = LuaRuntime(unpack_returned_tuples=True)
 strings.execute("OneMap = {}; function GetCVar() return 'en' end; function ZO_CreateStringId() end")

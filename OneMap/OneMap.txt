@@ -12,6 +12,7 @@ Strings.lua
 Destinations.lua
 Travel.lua
 Map.lua
+Scroll.lua
 Panels.lua
 Settings.lua
 OneMap.lua

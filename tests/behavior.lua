@@ -320,7 +320,7 @@ end }
 local normalizedZoom = 0
 function ZO_WorldMap_GetPanAndZoom() return { GetCurrentNormalizedZoom = function() return normalizedZoom end, SetCurrentNormalizedZoom = function(_, value) normalizedZoom = value end } end
 WORLD_MAP_MANAGER.ResizeAndReanchorMap = function() ZO_WorldMap:SetDimensions(600, 600) end
-load("Map"); load("Panels"); load("Settings"); load("OneMap")
+load("Map"); load("Scroll"); load("Panels"); load("Settings"); load("OneMap")
 events["OneMap" .. tostring(EVENT_ADD_ON_LOADED)](nil, "OtherAddon")
 equal(A.baseMapScale, nil, "ignore other addons loading")
 events["OneMap" .. tostring(EVENT_ADD_ON_LOADED)](nil, "OneMap")
@@ -346,7 +346,7 @@ for _, control in ipairs(optionControls) do
         end
     end
 end
-equal(settingsCount, 4, "three map settings and paid-confirmation option")
+equal(settingsCount, 5, "map, smooth-scroll and paid-confirmation settings")
 A:RenderTravelTooltip({kind = "house", houseId = 42, zoneId = 10, name = "House"})
 equal(A.travelTooltip:GetWidth(), 212, "tooltip width fits measured content")
 equal(A.travelTooltip:GetHeight(), 52, "compact tooltip padding")

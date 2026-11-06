@@ -1,0 +1,102 @@
+local A = OneMap
+local PAUSE_MS, INPUT_GAP_MS = 400, 900
+local FADE_OUT_MS, FADE_IN_MS = 120, 160
+
+function A:CancelSmoothScroll()
+    local wasFading = self.scrollFade ~= nil
+    self.scrollBoundary, self.scrollFade = nil, nil
+    EVENT_MANAGER:UnregisterForUpdate("OneMapScrollFade")
+    if wasFading then ZO_WorldMapContainer:SetAlpha(1) end
+end
+
+function A:GetScrollTarget()
+    local x, y = NormalizeMousePositionToControl(ZO_WorldMapContainer)
+    local canEnter, mapIndex = WouldProcessMapClick(x, y)
+    if canEnter and mapIndex then return mapIndex end
+end
+
+function A:CanContinueScroll(state)
+    return self.saved.smoothScroll and self:CanUseMap() and MouseIsOver(ZO_WorldMapScroll)
+        and GetCurrentMapId() == state.mapId
+        and not (IsControlKeyDown() or IsAltKeyDown() or IsShiftKeyDown())
+        and WORLD_MAP_MANAGER:IsMapChangingAllowed(state.direction)
+        and (state.direction < 0 or self:GetScrollTarget() == state.target)
+end
+
+function A:StartScrollTransition(boundary)
+    self.scrollBoundary = nil
+    self.scrollFade = { mapId = boundary.mapId, direction = boundary.direction,
+        target = boundary.target, started = GetFrameTimeMilliseconds() }
+    EVENT_MANAGER:RegisterForUpdate("OneMapScrollFade", 16, function() self:UpdateScrollTransition() end)
+end
+
+function A:UpdateScrollTransition()
+    local state = self.scrollFade
+    if not state then return end
+    local elapsed = GetFrameTimeMilliseconds() - state.started
+    if not state.switched then
+        -- Revalidate the map under the cursor before dispatching a native map
+        -- navigation click. No pin handler or travel action is invoked here.
+        if not self:CanContinueScroll(state) then self:CancelSmoothScroll(); return end
+        if elapsed < FADE_OUT_MS then
+            ZO_WorldMapContainer:SetAlpha(1 - elapsed / FADE_OUT_MS)
+            return
+        end
+        self.scrollChangingMap = true
+        ZO_WorldMap_MouseUp(ZO_WorldMapContainer,
+            state.direction > 0 and MOUSE_BUTTON_INDEX_LEFT or MOUSE_BUTTON_INDEX_RIGHT, true)
+        self.scrollChangingMap = false
+        if GetCurrentMapId() == state.mapId then self:CancelSmoothScroll(); return end
+        state.mapId, state.switched, state.started = GetCurrentMapId(), true, GetFrameTimeMilliseconds()
+        ZO_WorldMapContainer:SetAlpha(0)
+    else
+        if not self.saved.smoothScroll or not self:IsKeyboardMap() or GetCurrentMapId() ~= state.mapId then
+            self:CancelSmoothScroll(); return
+        end
+        if elapsed >= FADE_IN_MS then self:CancelSmoothScroll()
+        else ZO_WorldMapContainer:SetAlpha(elapsed / FADE_IN_MS) end
+    end
+end
+
+function A:HandleSmoothScroll(delta)
+    if not self.saved.smoothScroll or not self:CanUseMap() or not MouseIsOver(ZO_WorldMapScroll)
+        or delta == 0 or IsControlKeyDown() or IsAltKeyDown() or IsShiftKeyDown() then
+        self:CancelSmoothScroll()
+        return
+    end
+    if self.scrollFade then return true end
+    local direction = delta > 0 and 1 or -1
+    if not WORLD_MAP_MANAGER:IsMapChangingAllowed(direction) then self.scrollBoundary = nil; return true end
+    local zoom = ZO_WorldMap_GetPanAndZoom()
+    local minimum, maximum = zoom:GetZoomMinMax()
+    local hasZoomRange = zoom:CanMapZoom() and maximum > minimum + 0.001
+    local position = zoom:GetCurrentNormalizedZoom()
+    local atBoundary = not hasZoomRange or (not zoom:HasTargetZoom()
+        and (direction > 0 and position >= 0.999 or direction < 0 and position <= 0.001))
+    if not atBoundary then
+        self.scrollBoundary = nil
+        return -- Native AddZoomDelta already uses smooth, cursor-locked interpolation.
+    end
+    local target = direction > 0 and self:GetScrollTarget() or nil
+    if direction > 0 and not target then self.scrollBoundary = nil; return true end
+    local now, mapId = GetFrameTimeMilliseconds(), GetCurrentMapId()
+    local boundary = self.scrollBoundary
+    if not boundary or boundary.direction ~= direction or boundary.target ~= target
+        or boundary.mapId ~= mapId or now - boundary.lastInput > INPUT_GAP_MS then
+        self.scrollBoundary = { direction = direction, target = target, mapId = mapId, started = now, lastInput = now }
+    else
+        boundary.lastInput = now
+        if now - boundary.started >= PAUSE_MS then self:StartScrollTransition(boundary) end
+    end
+    return true
+end
+
+function A:InitializeScroll()
+    ZO_PreHook("ZO_WorldMap_MouseWheel", function(delta) return self:HandleSmoothScroll(delta) end)
+    CALLBACK_MANAGER:RegisterCallback("OnWorldMapChanged", function()
+        if not self.scrollChangingMap then self:CancelSmoothScroll() end
+    end)
+    SCENE_MANAGER:GetScene("worldMap"):RegisterCallback("StateChange", function()
+        if not self:IsKeyboardMap() then self:CancelSmoothScroll() end
+    end)
+end
