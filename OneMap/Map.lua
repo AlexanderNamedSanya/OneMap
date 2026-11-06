@@ -28,12 +28,16 @@ function A:RenderTravelTooltip(destination)
     local tooltip = self.travelTooltip
     local text = destination.name or ""
     if destination.location and destination.location ~= text then text = text .. "\n" .. destination.location end
+    tooltip.label:SetWidth(280)
     tooltip.label:SetText(text .. "\n|c80dfff" .. self:PriceText(destination) .. "|r")
+    local textWidth = tooltip.label:GetTextDimensions()
+    local width = math.min(280, math.max(100, textWidth)) + 12
+    tooltip.label:SetWidth(width - 12)
     local _, height = tooltip.label:GetTextDimensions()
-    tooltip:SetDimensions(350, height + 20)
+    tooltip:SetDimensions(width, height + 12)
     local x, y = GetUIMousePosition()
-    x = math.max(0, math.min(x + 22, GuiRoot:GetWidth() - 350))
-    y = math.max(0, math.min(y + 22, GuiRoot:GetHeight() - height - 20))
+    x = math.max(0, math.min(x + 16, GuiRoot:GetWidth() - width))
+    y = math.max(0, math.min(y + 16, GuiRoot:GetHeight() - height - 12))
     tooltip:ClearAnchors()
     tooltip:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, x, y)
     tooltip:SetHidden(false)
@@ -109,9 +113,9 @@ function A:InitializeMap()
     background:SetEdgeColor(0.25, 0.4, 0.5, 1)
     background:SetEdgeTexture("EsoUI/Art/Tooltips/UI-Border.dds", 128, 16, 8)
     tooltip.label = WINDOW_MANAGER:CreateControl(nil, tooltip, CT_LABEL)
-    tooltip.label:SetAnchor(TOPLEFT, tooltip, TOPLEFT, 10, 10)
-    tooltip.label:SetWidth(330)
-    tooltip.label:SetFont("ZoFontGame")
+    tooltip.label:SetAnchor(TOPLEFT, tooltip, TOPLEFT, 6, 6)
+    tooltip.label:SetWidth(280)
+    tooltip.label:SetFont("ZoFontGameSmall")
     self.travelTooltip = tooltip
 
     -- Resize the native viewport once per layout pass, without scaling pins.

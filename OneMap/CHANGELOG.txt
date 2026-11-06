@@ -2,3 +2,5 @@
 - Standard-size sidebar tab buttons.
 - Map enlargement is now 10%, with a fixed viewport and standard pin sizes.
 - Simplified settings to map enlargement, Area Completion and player waves; sidebar and travel features are always enabled.
+- Compact travel tooltips with content-sized width.
+- Optional immediate paid recall without the confirmation dialog; off by default.

@@ -21,3 +21,5 @@ No ESOUI upload was performed.
 84 automated routing/UI assertions pass after replacing whole-control scaling with a 5% native viewport resize, removing map-pin and map-background travel hooks, eliminating map changes during price hovers, and restoring native Antiquities left-click behavior. Tests cover unchanged viewport dimensions during zoom, repeated layout, native pin handling and the original control scale. Live acceptance of these latest corrections is pending UI reload.
 
 Latest settings/sidebar revision: 85 automated assertions pass. Native sidebar button scale is preserved; enlargement is 10%; the three remaining map settings are verified, and older disabled travel/trial values are migrated to enabled. Live verification after reload remains pending.
+
+Compact tooltip / paid-confirmation revision: 95 automated assertions pass, covering content-sized tooltip dimensions, default confirmation, immediate paid recall when opted in, insufficient currency and cooldown rejection, and retained native free-shrine dialogs. Live appearance and completed server travel remain pending UI reload and in-game verification.

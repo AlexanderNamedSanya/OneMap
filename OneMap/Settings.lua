@@ -12,6 +12,7 @@ function A:CreateSettings()
     local function Checkbox(key)
         options[#options + 1] = {
             type = "checkbox", name = self:Text(key), width = "full", default = self.defaults[key],
+            tooltip = self.strings[key .. "Tooltip"],
             getFunc = function() return self.saved[key] end,
             setFunc = function(value)
                 self.saved[key] = value
@@ -28,5 +29,6 @@ function A:CreateSettings()
     Description("scope")
     Header("map")
     for _, key in ipairs({ "enlargeMap", "hideCompletion", "playerPulse" }) do Checkbox(key) end
+    Checkbox("skipPaidConfirmation")
     LibAddonMenu2:RegisterOptionControls(panelName, options)
 end

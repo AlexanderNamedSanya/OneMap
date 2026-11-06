@@ -27,7 +27,7 @@ SI_LFG_ACTIVITY_NAME, SI_ZONE_NAME = "name", "zone"
 local gamepad, showing, changing, combat, dead, leave, campaign = false, true, true, false, false, true, false
 local map, floor, time, currentNode, cooldown, gold = 99, 2, 1000, nil, 0, 10000
 local nodes, group, friends, guilds, positions = {}, {}, {}, {}, {}
-local jump, dialog, alert
+local jump, dialog, alert, directNode
 function GetCVar() return "en" end
 function ZO_CreateStringId(name) _G[name] = name end
 function ZO_Alert(_, _, text) alert = text end
@@ -100,6 +100,8 @@ function GetGuildMemberCharacterInfo(id, index) local p = guilds[id][index]; ret
 function JumpToGroupMember(name) jump = "group:" .. name end
 function JumpToFriend(name) jump = "friend:" .. name end
 function JumpToGuildMember(name) jump = "guild:" .. name end
+function FastTravelToNode(node) directNode = node end
+function SCENE_MANAGER:ShowBaseScene() end
 function ZO_Dialogs_ShowPlatformDialog(name, data) dialog = { name = name, data = data } end
 function ZO_Currency_FormatKeyboard(_, value) return value .. " gold" end
 function zo_strformat(_, value) return value end
@@ -154,7 +156,12 @@ socialAllowed = true
 equal(A:PriceText(zone), "Travel: Free")
 group, guilds, friends = {}, {}, {}; A.quote = nil
 A:Travel(zone); equal(dialog.name, "RECALL_CONFIRM"); equal(dialog.data.nodeIndex, 2)
-currentNode = 8; equal(A:PlanTravel(zone).cost, 0); A:Travel(zone); equal(dialog.name, "FAST_TRAVEL_CONFIRM")
+equal(A.saved.skipPaidConfirmation, false, "paid confirmation enabled by default")
+A.saved.skipPaidConfirmation = true; dialog = nil
+A:Travel(zone); equal(directNode, 2, "paid recall skips dialog when enabled"); equal(dialog, nil)
+directNode = nil; gold = 0; equal(A:Travel(zone), false); equal(directNode, nil, "insufficient gold blocks immediate recall"); gold = 10000
+cooldown = 100; equal(A:Travel(zone), false); equal(directNode, nil, "cooldown blocks immediate recall"); cooldown = 0
+currentNode = 8; equal(A:PlanTravel(zone).cost, 0); A:Travel(zone); equal(dialog.name, "FAST_TRAVEL_CONFIRM"); equal(directNode, nil, "free shrine travel retains native dialog"); A.saved.skipPaidConfirmation = false
 currentNode = 2; equal(A:PlanTravel(zone).reason, "unavailable"); currentNode = nil
 cooldown = 2000; equal(A:PlanTravel(zone).reason, "cooldown"); cooldown = 0
 gold = 0; equal(A:PlanTravel(zone).reason, "noGold"); gold = 10000
@@ -332,7 +339,10 @@ for _, control in ipairs(optionControls) do
         end
     end
 end
-equal(settingsCount, 3, "only three map settings remain")
+equal(settingsCount, 4, "three map settings and paid-confirmation option")
+A:RenderTravelTooltip({kind = "house", houseId = 42, zoneId = 10, name = "House"})
+equal(A.travelTooltip:GetWidth(), 212, "tooltip width fits measured content")
+equal(A.travelTooltip:GetHeight(), 52, "compact tooltip padding")
 equal(ZO_WorldMapInfoMenuBar:GetScale(), 1, "standard tab button scale")
 equal(A.saved.freeTravel, true, "legacy disabled travel setting is enabled")
 equal(A.saved.showTrials, true, "legacy hidden trials setting is enabled")

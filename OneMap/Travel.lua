@@ -85,6 +85,9 @@ function A:Travel(destination)
     elseif plan.kind == "house" then
         ZO_Dialogs_ShowPlatformDialog("TRAVEL_TO_HOUSE_CONFIRM",
             { houseId = plan.houseId, travelOutside = false }, { mainTextParams = { destination.name } })
+    elseif plan.cost > 0 and self.saved.skipPaidConfirmation then
+        FastTravelToNode(plan.nodeIndex)
+        SCENE_MANAGER:ShowBaseScene()
     else
         -- Let the stock dialogs handle confirmation, last-moment affordability,
         -- cooldowns and restrictions. Never silently charge after a failed jump.

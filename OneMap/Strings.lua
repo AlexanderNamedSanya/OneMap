@@ -1,6 +1,8 @@
 local A = OneMap
 local en = {
     map = "Map", travel = "Travel", sources = "Free travel sources",
+    skipPaidConfirmation = "Skip paid teleport confirmation",
+    skipPaidConfirmationTooltip = "Paid travel starts immediately and spends the displayed amount without a confirmation dialog.",
     enlargeMap = "Enlarge the map", hideCompletion = "Hide Area Completion",
     playerPulse = "Blue waves around the player marker", compactHouses = "House and location on one line",
     showDungeons = "Show Dungeons tab", showTrials = "Show Trials tab",
@@ -23,6 +25,8 @@ local en = {
 }
 local ru = {
     map = "Карта", travel = "Телепортация", sources = "Источники бесплатной телепортации",
+    skipPaidConfirmation = "Пропускать подтверждение платной телепортации",
+    skipPaidConfirmationTooltip = "Платная телепортация начинается сразу и списывает указанную сумму без окна подтверждения.",
     enlargeMap = "Увеличить карту", hideCompletion = "Скрыть Area Completion",
     playerPulse = "Голубые волны вокруг отметки персонажа", compactHouses = "Дом и локация в одной строке",
     showDungeons = "Показывать раздел «Данжи»", showTrials = "Показывать раздел «Триалы»",
